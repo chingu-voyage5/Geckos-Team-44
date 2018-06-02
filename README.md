@@ -1,2 +1,2 @@
 # Geckos-Team-44
-Add-project-description-here | Voyage-5 | chingu.io
+Geckos-Team-44 Chrome Extension | Voyage-5 | chingu.io

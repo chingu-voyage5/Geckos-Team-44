@@ -1,0 +1,3 @@
+var helloWorld = function(){
+	return "";
+}

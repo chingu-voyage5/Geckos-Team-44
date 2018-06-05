@@ -64,4 +64,6 @@ Database - Chrome local storage
 
 Deployment -  Chrome Web Store
 
+
 Stack: HTML, CSS/SASS, vanilla JavaScript (or jQuery), ESLint
+

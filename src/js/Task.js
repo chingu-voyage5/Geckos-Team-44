@@ -1,6 +1,7 @@
 
-function Task(id=null, title="", mode="", timeBlocks=-1, order=-1, 
-			  createdOn=null, updatedOn=null, completedOn=null) {
+function Task(id=null, title="", mode="", timeBlocks=0, order=0, 
+			  createdOn=null, updatedOn=null, completedOn=null, 
+			  totalTimeSpent=0) {
 	this.id = id;
 	this.title = title;
 	this.mode = mode;
@@ -9,6 +10,7 @@ function Task(id=null, title="", mode="", timeBlocks=-1, order=-1,
 	this.createdOn = createdOn;
 	this.updatedOn = updatedOn;
 	this.completedOn = completedOn;
+	this.totalTimeSpent = totalTimeSpent;
 }
 
 
@@ -18,6 +20,7 @@ Task.prototype.isCompleted = function() {
 	return false;
 };
 
-Task.prototype.setComplete = function() {
+Task.prototype.setComplete = function(timeBlockSize=15.0) {
+	this.totalTimeSpent = timeBlockSize * this.timeBlocks;
 	this.completedOn = new Date();
 }

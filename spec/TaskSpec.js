@@ -4,7 +4,7 @@ describe("Task", function(){
 		this.task = new Task();
 	});
 
-	describe("On construction", function(){
+	describe("Constructor", function(){
 		it("should have id with default null", function(){
 			expect(this.task.id).toEqual(null);		
 		});
@@ -18,11 +18,11 @@ describe("Task", function(){
 		});
 
 		it("should have timeBlocks with default -1", function(){
-			expect(this.task.timeBlocks).toEqual(-1);
+			expect(this.task.timeBlocks).toEqual(0);
 		});
 
 		it("should have order with default -1", function(){
-			expect(this.task.order).toEqual(-1);
+			expect(this.task.order).toEqual(0);
 		});
 
 		it("should have createdOn with default null", function(){
@@ -35,6 +35,10 @@ describe("Task", function(){
 
 		it("should have completedOn with default null", function(){
 			expect(this.task.completedOn).toEqual(null);
+		});
+
+		it("should have totalTimeSpent with default 0", function(){
+			expect(this.task.totalTimeSpent).toEqual(0);
 		});
 	});
 
@@ -55,5 +59,12 @@ describe("Task", function(){
 			this.task.setComplete();
 			expect(this.task.completedOn.getDay()).toEqual(currentDate.getDay());
 		});
+
+		it("should set totalTimeSpent to timeBlocSize multipled by timeBlocks", function(){
+			this.task.timeBlocks = 4
+			let timeBlockSize = 15.0;
+			this.task.setComplete(timeBlockSize);
+			expect(this.task.totalTimeSpent).toEqual(60.0);
+		})
 	})
 });

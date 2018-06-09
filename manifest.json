@@ -9,6 +9,7 @@
 	"background": {
 		"persistent": false,
 		"scripts": ["src/js/background.js"]
-	}
+	},
+	"permissions": ["storage"]
 
 }

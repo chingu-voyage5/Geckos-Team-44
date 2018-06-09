@@ -1,7 +1,7 @@
 
-function Task(id=null, title="", mode="", timeBlocks=0, order=0, 
+function Task(title="", mode="", timeBlocks=0, order=0, 
 			  createdOn=null, updatedOn=null, completedOn=null, 
-			  totalTimeSpent=0) {
+			  totalTimeSpent=0, id=null) {
 	this.id = id;
 	this.title = title;
 	this.mode = mode;

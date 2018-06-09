@@ -9,7 +9,7 @@ var chromeMock = {
 
 describe("TaskRepository", function(){
 	beforeEach(function(){
-		this.taskRepository = new TaskRepository(chromeMock); 
+		this.taskRepository = new TaskRepository(chromeMock.storage); 
 		this.task = new Task();
 		this.task.title = "test";
 		
@@ -28,9 +28,9 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._state.storage.sync, "set");
+			spyOn(this.taskRepository._state.sync, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._state.storage.sync.set).toHaveBeenCalled();
+			expect(this.taskRepository._state.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){

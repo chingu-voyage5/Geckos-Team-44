@@ -17,11 +17,11 @@ describe("Task", function(){
 			expect(this.task.mode).toEqual("");
 		});
 
-		it("should have timeBlocks with default -1", function(){
+		it("should have timeBlocks with default 0", function(){
 			expect(this.task.timeBlocks).toEqual(0);
 		});
 
-		it("should have order with default -1", function(){
+		it("should have order with default 0", function(){
 			expect(this.task.order).toEqual(0);
 		});
 

@@ -9,7 +9,8 @@
 	"background": {
 		"persistent": false,
 		"scripts": ["src/js/Helpers.js", "src/js/Task.js", 
-			"src/js/TaskRepository.js","src/js/background.js"]
+			"src/js/TaskRepository.js", "src/js/TaskService.js", 
+			"src/js/background.js"]
 	},
 	"permissions": ["storage"]
 

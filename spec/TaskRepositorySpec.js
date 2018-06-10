@@ -1,8 +1,9 @@
 
-var chromeMock = {
+chromeMock = {
 	storage: {
 		sync: {
 			set: function(keyValue, callback){},
+			get: function(key, callback){}
 		}
 	}
 }
@@ -57,5 +58,25 @@ describe("TaskRepository", function(){
 			this.taskRepository.save(this.task);	
 			expect(Object.keys(this.taskRepository._tasks).length).toEqual(1);	
 		});
+	});
+
+	describe("serializeTask", function(){
+		it("should seralize date objects to json", function(){
+			let task = new Task();
+			task.createdOn = new Date("2018-06-10");
+			let seralizedTask = this.taskRepository.serializeTask(task);
+			expect(seralizedTask.createdOn).toEqual("2018-06-10T00:00:00.000Z");
+			expect(typeof seralizedTask.createdOn === "string").toBe(true);
+		})
+	});
+
+	describe("unserializeTask", function(){
+		it("should seralize date objects to json", function(){
+			let task = new Task();
+			task.createdOn = new Date("2018-06-10");
+			let seralizedTask = this.taskRepository.serializeTask(task);
+			let unserializedTask = this.taskRepository.unserializeTask(seralizedTask);
+			expect(unserializedTask.createdOn).toEqual(new Date("2018-06-10"));
+		})
 	});
 });

@@ -1,5 +1,5 @@
 
-function Task(title="", mode="", timeBlocks=0, order=0, 
+function Task(title="", mode="", timeBlocks=1, order=-1, 
 			  createdOn=null, updatedOn=null, completedOn=null, 
 			  totalTimeSpent=0, id=null) {
 	this.id = id;

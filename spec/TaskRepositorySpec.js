@@ -1,9 +1,22 @@
 
 chromeMock = {
+	inMemoryStore: {},
 	storage: {
 		sync: {
-			set: function(keyValue, callback){},
-			get: function(key, callback){}
+			set: function(keyValue, callback){
+				Object.keys(keyValue).forEach(function(key){
+					chromeMock.inMemoryStore[key] = JSON.stringify(keyValue[key]);
+				});
+			},
+			get: function(keys, callback){
+				let result = {};
+				for (key in keys) {
+					let value = chromeMock.inMemoryStore[key];
+					if (value !== undefined)
+						result[key] = JSON.parse(value);
+				}
+				callback(result);
+			}
 		}
 	}
 }
@@ -13,7 +26,6 @@ describe("TaskRepository", function(){
 		this.taskRepository = new TaskRepository(chromeMock.storage); 
 		this.task = new Task();
 		this.task.title = "test";
-		
 	});
 
 	describe("save", function(){

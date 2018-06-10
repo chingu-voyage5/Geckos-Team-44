@@ -6,6 +6,9 @@ function TaskRepository(state){
 };
 
 TaskRepository.prototype.save = function(task){
+	let state = this._state,
+		serializeTask = this.serializeTask;
+
 	if (task.id === null)
 		task.id = uuid();
 	if (task.createdOn === null)

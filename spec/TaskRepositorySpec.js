@@ -41,9 +41,9 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._state.sync, "set");
+			spyOn(this.taskRepository._storage.sync, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._state.sync.set).toHaveBeenCalled();
+			expect(this.taskRepository._storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){
@@ -59,10 +59,13 @@ describe("TaskRepository", function(){
 		it("should add date to updatedOn on each save", function(){
 			this.taskRepository.save(this.task);
 			let firstDate = this.task.updatedOn;
-			sleep(1);
+			jasmine.clock().install();
+			jasmine.clock().mockDate();
+			jasmine.clock().tick(1);
 			this.taskRepository.save(this.task);
 			let secondDate = this.task.updatedOn;	
 			expect(firstDate.getTime()).not.toEqual(secondDate.getTime());
+			jasmine.clock().uninstall();
 		});
 
 		it("should update previously saved objects", function(){

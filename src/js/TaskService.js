@@ -28,8 +28,7 @@ TaskService.prototype.addTask = function(request){
     let errors = this.validateRequest(request);
     if (errors.length > 0)
         throw errors;
-        
-    let task = new Task(request.title, request.mode, request.timeBlocks);
-    this.taskRepository.save(task);
+    let task = this.taskRepository.save(
+        new Task(request.title, request.mode, request.timeBlocks));
     return {task: task};
 };

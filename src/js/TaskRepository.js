@@ -1,14 +1,11 @@
 
 
-function TaskRepository(state){
-	this._state = state;
+function TaskRepository(storage){
+	this._storage = storage;
 	this._tasks = {};
 };
 
 TaskRepository.prototype.save = function(task){
-	let state = this._state,
-		serializeTask = this.serializeTask;
-
 	if (task.id === null)
 		task.id = uuid();
 	if (task.createdOn === null)
@@ -16,8 +13,9 @@ TaskRepository.prototype.save = function(task){
 	task.updatedOn = new Date();
 
 	let copiedTask = Object.assign({}, task);
-	this._tasks[copiedTask.id] = this.serializeTask(copiedTask);
-	this._state.sync.set({"tasksMap": this._tasks}, function(){});
+	this._tasks[task.id] = copiedTask;
+	this._storage.sync.set({[task.id]: this.serializeTask(copiedTask)});
+	return task;
 };
 
 TaskRepository.prototype.serializeTask = function(task){

@@ -41,9 +41,9 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._state.sync, "set");
+			spyOn(this.taskRepository._storage.sync, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._state.sync.set).toHaveBeenCalled();
+			expect(this.taskRepository._storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){

@@ -59,10 +59,13 @@ describe("TaskRepository", function(){
 		it("should add date to updatedOn on each save", function(){
 			this.taskRepository.save(this.task);
 			let firstDate = this.task.updatedOn;
-			sleep(1);
+			jasmine.clock().install();
+			jasmine.clock().mockDate();
+			jasmine.clock().tick(1);
 			this.taskRepository.save(this.task);
 			let secondDate = this.task.updatedOn;	
 			expect(firstDate.getTime()).not.toEqual(secondDate.getTime());
+			jasmine.clock().uninstall();
 		});
 
 		it("should update previously saved objects", function(){

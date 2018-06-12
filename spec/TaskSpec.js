@@ -5,39 +5,39 @@ describe("Task", function(){
 	});
 
 	describe("Constructor", function(){
-		it("should have id with default null", function(){
+		it("should set id with default null", function(){
 			expect(this.task.id).toEqual(null);		
 		});
 
-		it("should have title with default empty string", function(){
+		it("should set title with default empty string", function(){
 			expect(this.task.title).toEqual("");		
 		});
 
-		it("should have mode with default empty string", function(){
+		it("should set mode with default empty string", function(){
 			expect(this.task.mode).toEqual("");
 		});
 
-		it("should have timeBlocks with default 1", function(){
+		it("should set timeBlocks with default 1", function(){
 			expect(this.task.timeBlocks).toEqual(1);
 		});
 
-		it("should have order with default -1", function(){
+		it("should set order with default -1", function(){
 			expect(this.task.order).toEqual(-1);
 		});
 
-		it("should have createdOn with default null", function(){
+		it("should set createdOn with default null", function(){
 			expect(this.task.createdOn).toEqual(null);
 		});
 
-		it("should have updatedOn with default null", function(){
+		it("should set updatedOn with default null", function(){
 			expect(this.task.updatedOn).toEqual(null);
 		});
 
-		it("should have completedOn with default null", function(){
+		it("should set completedOn with default null", function(){
 			expect(this.task.completedOn).toEqual(null);
 		});
 
-		it("should have totalTimeSpent with default 0", function(){
+		it("should set totalTimeSpent with default 0", function(){
 			expect(this.task.totalTimeSpent).toEqual(0);
 		});
 	});

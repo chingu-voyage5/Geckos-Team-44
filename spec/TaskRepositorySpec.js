@@ -23,7 +23,7 @@ chromeMock = {
 
 describe("TaskRepository", function(){
 	beforeEach(function(){
-		this.taskRepository = new TaskRepository(chromeMock.storage); 
+		this.taskRepository = new TaskRepository(new ChromeStorage(chromeMock.storage)); 
 		this.task = new Task();
 		this.task.title = "test";
 	});
@@ -41,9 +41,9 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._storage.sync, "set");
+			spyOn(this.taskRepository._storage, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._storage.sync.set).toHaveBeenCalled();
+			expect(this.taskRepository._storage.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){
@@ -86,7 +86,7 @@ describe("TaskRepository", function(){
 	});
 
 	describe("unserializeTask", function(){
-		it("should seralize date objects to json", function(){
+		it("should unseralize date from json to object", function(){
 			let task = new Task();
 			task.createdOn = new Date("2018-06-10");
 			let seralizedTask = this.taskRepository.serializeTask(task);

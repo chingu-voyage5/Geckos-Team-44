@@ -1,0 +1,47 @@
+body {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.navButtons {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+
+.taskList {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 2;
+	grid-row-end: 3;
+}
+
+.newTaskButton {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 3;
+	grid-row-end: 4;
+}
+
+.currentTask {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+
+.pomodoro {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 5;
+	grid-row-end: 6;
+}
+
+.pomodoroControls {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+	grid-row-start: 6;
+	grid-row-end: 7;
+}

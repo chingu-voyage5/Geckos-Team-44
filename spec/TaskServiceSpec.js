@@ -2,7 +2,7 @@
 
 describe("TaskService", function() {
     beforeEach(function(){
-        this.taskRepository = new TaskRepository(chromeMock.storage); 
+        this.taskRepository = new TaskRepository(new ChromeStorage(chromeMock.storage)); 
         this.taskService = new TaskService(this.taskRepository);   
     });
 

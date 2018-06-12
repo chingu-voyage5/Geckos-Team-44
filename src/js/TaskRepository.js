@@ -14,7 +14,7 @@ TaskRepository.prototype.save = function(task){
 
 	let copiedTask = Object.assign({}, task);
 	this._tasks[task.id] = copiedTask;
-	this._storage.sync.set({[task.id]: this.serializeTask(copiedTask)});
+	this._storage.set({[task.id]: this.serializeTask(copiedTask)});
 	return task;
 };
 

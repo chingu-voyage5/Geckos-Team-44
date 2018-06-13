@@ -8,7 +8,7 @@ chromeMock = {
 		sync: {
 			set: function(keyValues, callback){
                 for (key in keyValues)
-                    chromeMock.storage.data[key] = keyValues[key];
+                    chromeMock.storage.data[key] = JSON.stringify(keyValues[key]);
                 if (callback !== undefined )
                     callback();
             },
@@ -18,7 +18,7 @@ chromeMock = {
                 if (keys === null)
                     return chromeMock.storage.data
                 for (key of keys){
-                    let result = chromeMock.storage.data[key];
+                    let result = JSON.parse(chromeMock.storage.data[key]);
                     if (result)
                         results[key] = result;
                 }

@@ -16,7 +16,7 @@ TaskRepository.prototype.save = function(task, callback){
 	this._tasks[task.id] = copiedTask;
 
 	this._chrome.storage.sync.set({[task.id]: this.serializeTask(copiedTask)}, function(){
-		callback(task);
+		callback(null, task);
 	});
 };
 
@@ -30,6 +30,17 @@ TaskRepository.prototype.fetchAll = function(callback){
 		callback(null, {tasks: tasks});
 	});
 }
+
+TaskRepository.prototype.fetch = function(taskId, callback){
+	let unserializeTask = this.unserializeTask;
+	this._chrome.storage.sync.get([taskId], function(result){
+		let task = result[taskId];
+		if (task)
+			callback(unserializeTask(task));
+		else
+			callback(null);
+	});
+};
 
 TaskRepository.prototype.serializeTask = function(task){
 	Object.keys(task).forEach(function(key){

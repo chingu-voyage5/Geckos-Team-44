@@ -1,7 +1,7 @@
 
 
 function createTestTask(title, id, completed=false){
-    let task = new Task(title);
+    let task = new Task(title, "work", 1);
     task.createdOn = new Date();
     task.updatedOn = new Date();
     task.id = id;
@@ -70,14 +70,6 @@ describe("TaskService", function() {
     });
 
     describe("listTasks", function(){
-        describe("Given no saved tasks", function(){
-            it("should return no tasks", function(){
-                this.taskService.listTasks(this.observer.callback); 
-                expect(this.observer.callback).toHaveBeenCalledWith(
-                    null, {tasks: []});
-            });  
-        });
-
         describe("Given multiple saved tasks", function(){
             beforeEach(function(){
                 let task1 = this.taskRepository.serializeTask(createTestTask("test1", "1"));
@@ -95,6 +87,38 @@ describe("TaskService", function() {
                         jasmine.objectContaining({id: "1", title: "test1"}),
                         jasmine.objectContaining({id: "2", title: "test2"}),
                     ])});
+            });
+        });
+    });
+
+    describe("editTask", function(){
+        beforeEach(function(){
+            let task = this.taskRepository.serializeTask(createTestTask("test", "1"));
+            this.chrome.storage.sync.set({[task.id]: task});
+        });
+
+        describe("Given saved task id", function(){
+            it("should update task", function(){
+                let request = {id: "1", title: "test updated", timeBlocks: 1, mode: "work"};
+                this.taskService.editTask(request, this.observer.callback);
+                expect(this.observer.callback).toHaveBeenCalledWith(
+                    null, {task: jasmine.objectContaining({id: "1", title: "test updated"})})
+            });
+
+            it("should not allow invalid request", function(){
+                let request = {id: "1", title: "", timeBlocks: 1, mode: "work"};
+                this.taskService.editTask(request, this.observer.callback);
+                expect(this.observer.callback).toHaveBeenCalledWith(
+                    jasmine.objectContaining({message:["Title cannot be blank"]}), null);     
+            })
+        });
+
+        describe("Given unsaved task id", function(){
+            it("should return TaskNotFoundError", function(){
+                let request = {id: "notFound", title: "test updated", timeBlocks: 1, mode: "work"};
+                this.taskService.editTask(request, this.observer.callback);
+                expect(this.observer.callback).toHaveBeenCalledWith(
+                    jasmine.objectContaining({message:"Task not found"}), null)
             });
         });
     });

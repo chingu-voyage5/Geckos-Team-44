@@ -1,5 +1,15 @@
 
 
+function createTestTask(title, id, completed=false){
+    let task = new Task(title);
+    task.createdOn = new Date();
+    task.updatedOn = new Date();
+    task.id = id;
+    if (completed)
+        task.setComplete();
+    return task;
+}
+
 describe("TaskService", function() {
     beforeEach(function(){
         this.chrome = chromeMock;
@@ -68,19 +78,23 @@ describe("TaskService", function() {
             });  
         });
 
-        describe("Given one saved task", function(){
+        describe("Given multiple saved tasks", function(){
             beforeEach(function(){
-                let task = this.taskRepository.serializeTask(
-                    new Task(title="test", id="1"));
+                let task1 = this.taskRepository.serializeTask(createTestTask("test1", "1"));
+                let task2 = this.taskRepository.serializeTask(createTestTask("test2", "2"));
+                let task3 = this.taskRepository.serializeTask(createTestTask("test3", "3", true));
                 spyOn(this.chrome.storage.sync, "get").and.callFake(function(keys, callback){
-                    callback(null, {[task.id]: task});
+                    callback(null, {[task1.id]: task1, [task2.id]: task2, [task3.id]: task3});
                 })
             });
 
-            it("should return one task", function(){
+            it("should only return tasks that are not completed", function(){
                 this.taskService.listTasks(this.observer.callback);
                 expect(this.observer.callback).toHaveBeenCalledWith(
-                    null, {tasks: [jasmine.any(Object)]});
+                    null, {tasks: jasmine.arrayContaining([
+                        jasmine.objectContaining({id: "1", title: "test1"}),
+                        jasmine.objectContaining({id: "2", title: "test2"}),
+                    ])});
             });
         });
     });

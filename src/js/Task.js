@@ -16,9 +16,9 @@ function Task(title="", mode="", timeBlocks=1, order=-1,
 
 
 Task.prototype.isCompleted = function() {
-	if (this.completedOn !== null)
-		return true
-	return false;
+	if (this.completedOn === null)
+		return false
+	return true;
 };
 
 Task.prototype.setComplete = function(timeBlockSize=15.0) {

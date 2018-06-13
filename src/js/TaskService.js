@@ -45,7 +45,12 @@ TaskService.prototype.addTask = function(request, callback){
 
 TaskService.prototype.listTasks = function(callback){
     this.taskRepository.fetchAll(function(error, result){
-        callback(error, {"tasks": result.tasks});
+        let tasks = [];
+        for (task of result.tasks){
+            if (!task.isCompleted())
+                tasks.push(task);
+        }
+        callback(error, {tasks: tasks});
     })
 }
 

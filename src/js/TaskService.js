@@ -1,4 +1,9 @@
 
+function InvalidRequestError(message){
+    this.name = "InvalidRequestError";
+    this.message = message;
+}
+
 function TaskService(taskRepository){
     this.taskRepository = taskRepository;
 }
@@ -29,7 +34,7 @@ TaskService.prototype.validateRequest = function(request){
 TaskService.prototype.addTask = function(request, callback){
     let errors = this.validateRequest(request);
     if (errors){
-        callback({name: "InvalidRequestError", message: errors}, null);
+        callback(new InvalidRequestError(errors), null);
     } else {
         let task = new Task(request.title, request.mode, request.timeBlocks);
         this.taskRepository.save(task, function(){
@@ -37,3 +42,10 @@ TaskService.prototype.addTask = function(request, callback){
         });
     }
 };
+
+TaskService.prototype.listTasks = function(callback){
+    this.taskRepository.fetchAll(function(error, result){
+        callback(error, {"tasks": result.tasks});
+    })
+}
+

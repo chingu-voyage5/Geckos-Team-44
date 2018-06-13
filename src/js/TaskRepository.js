@@ -22,7 +22,7 @@ TaskRepository.prototype.save = function(task, callback){
 
 TaskRepository.prototype.fetchAll = function(callback){
 	let unserializeTask = this.unserializeTask;
-	this._chrome.storage.sync.get(null, function(result){
+	this._chrome.storage.sync.get(null, function(error, result){
 		let tasks = [];
 		for (key in result)
 			if (result[key].hasOwnProperty("name") && result[key].name == "Task")

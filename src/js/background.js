@@ -9,6 +9,6 @@ taskService.addTask(request, function(error, response){
     console.log(error, response);
 });
 
-taskRepository.fetchAll(function(error, result){
-    console.log(error, result);
+taskService.listTasks(function(error, response){
+    console.log(error, response);
 });

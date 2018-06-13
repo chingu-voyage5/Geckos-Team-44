@@ -18,6 +18,7 @@ describe("TaskRepository", function(){
 		this.taskRepository = new TaskRepository(this.chrome);
 		this.task = new Task();
 		this.task.title = "test";
+		this.observer = jasmine.createSpyObj("observer", ["callback"]);
 	});
 
 	describe("save", function(){
@@ -69,17 +70,14 @@ describe("TaskRepository", function(){
 	describe("fetchAll", function(){
 		beforeEach(function(){
 			spyOn(this.chrome.storage.sync, "get"); 
-			this.observer = jasmine.createSpyObj("observer", ["callback"]);
 		});
 
-		describe("Given no tasks", function(){
-			it("should fetch no tasks", function(){
-				this.taskRepository.fetchAll(this.observer.callback);
-				expect(this.chrome.storage.sync.get).toHaveBeenCalled();
-				expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
-					null, jasmine.any(Function));
-			})
-		});
+		it("should call storage get function with null", function(){
+			this.taskRepository.fetchAll(this.observer.callback);
+			expect(this.chrome.storage.sync.get).toHaveBeenCalled();
+			expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
+				null, jasmine.any(Function));
+		})
 	});
 
 	describe("serializeTask", function(){

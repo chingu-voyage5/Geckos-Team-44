@@ -1,10 +1,15 @@
 // Manual Test
 
 chrome.storage.sync.clear();
-var taskRepository = new TaskRepository(new ChromeStorage(chrome.storage));
+var taskRepository = new TaskRepository(chrome);
 var taskService = new TaskService(taskRepository);
-taskService.addTask({title: "test1", timeBlocks: 2, mode: "work"});
-taskService.addTask({title: "test1", timeBlocks: 2, mode: "work"});
-chrome.storage.sync.get(null, function(result){
-    console.log(result);
+var request = {title: "test", timeBlocks: 1, mode: "work"};
+
+taskService.addTask(request, function(error, response){
+    console.log(error, response);
 });
+
+taskService.listTasks(function(error, response){
+    console.log(error, response);
+});
+

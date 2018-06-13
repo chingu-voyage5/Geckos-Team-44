@@ -1,11 +1,11 @@
 
 
-function TaskRepository(storage){
-	this._storage = storage;
+function TaskRepository(chrome){
+	this._chrome = chrome;
 	this._tasks = {};
 };
 
-TaskRepository.prototype.save = function(task){
+TaskRepository.prototype.save = function(task, callback){
 	if (task.id === null)
 		task.id = uuid();
 	if (task.createdOn === null)
@@ -14,9 +14,22 @@ TaskRepository.prototype.save = function(task){
 
 	let copiedTask = Object.assign({}, task);
 	this._tasks[task.id] = copiedTask;
-	this._storage.set({[task.id]: this.serializeTask(copiedTask)});
-	return task;
+
+	this._chrome.storage.sync.set({[task.id]: this.serializeTask(copiedTask)}, function(){
+		callback(task);
+	});
 };
+
+TaskRepository.prototype.fetchAll = function(callback){
+	let unserializeTask = this.unserializeTask;
+	this._chrome.storage.sync.get(null, function(result){
+		let tasks = [];
+		for (key in result)
+			if (result[key].hasOwnProperty("name") && result[key].name == "Task")
+				tasks.push(unserializeTask(result[key]));
+		callback(null, {tasks: tasks});
+	});
+}
 
 TaskRepository.prototype.serializeTask = function(task){
 	Object.keys(task).forEach(function(key){

@@ -1,4 +1,9 @@
 
+function InvalidRequestError(message){
+    this.name = "InvalidRequestError";
+    this.message = message;
+}
+
 function TaskService(taskRepository){
     this.taskRepository = taskRepository;
 }
@@ -20,15 +25,32 @@ TaskService.prototype.validateRequest = function(request){
         errors.push("Time Blocks cannot be less than 1");
     else if (request.timeBlocks > 4)
         errors.push("Time Blocks cannot be more than 4");
-        
-    return errors;
+
+    if (errors.length > 0)    
+        return errors;
+    return null;
 };
 
-TaskService.prototype.addTask = function(request){
+TaskService.prototype.addTask = function(request, callback){
     let errors = this.validateRequest(request);
-    if (errors.length > 0)
-        throw errors;
-    let task = this.taskRepository.save(
-        new Task(request.title, request.mode, request.timeBlocks));
-    return {task: task};
+    if (errors){
+        callback(new InvalidRequestError(errors), null);
+    } else {
+        let task = new Task(request.title, request.mode, request.timeBlocks);
+        this.taskRepository.save(task, function(){
+            callback(null, {"task": task});
+        });
+    }
 };
+
+TaskService.prototype.listTasks = function(callback){
+    this.taskRepository.fetchAll(function(error, result){
+        let tasks = [];
+        for (task of result.tasks){
+            if (task.completedOn === null)
+                tasks.push(task);
+        }
+        callback(error, {tasks: tasks});
+    })
+}
+

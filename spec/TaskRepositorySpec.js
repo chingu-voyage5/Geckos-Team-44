@@ -1,31 +1,24 @@
 
 chromeMock = {
-	inMemoryStore: {},
+	runtime: {
+		error: null
+	},
 	storage: {
 		sync: {
-			set: function(keyValue, callback){
-				Object.keys(keyValue).forEach(function(key){
-					chromeMock.inMemoryStore[key] = JSON.stringify(keyValue[key]);
-				});
-			},
-			get: function(keys, callback){
-				let result = {};
-				for (key in keys) {
-					let value = chromeMock.inMemoryStore[key];
-					if (value !== undefined)
-						result[key] = JSON.parse(value);
-				}
-				callback(result);
-			}
+			set: function(keyValues, callback){callback();},
+			get: function(keys, callback){callback();}
 		}
 	}
 }
 
 describe("TaskRepository", function(){
 	beforeEach(function(){
-		this.taskRepository = new TaskRepository(new ChromeStorage(chromeMock.storage)); 
+		this.chrome = chromeMock;
+		spyOn(this.chrome.storage.sync, "set");
+		this.taskRepository = new TaskRepository(this.chrome);
 		this.task = new Task();
 		this.task.title = "test";
+		this.observer = jasmine.createSpyObj("observer", ["callback"]);
 	});
 
 	describe("save", function(){
@@ -41,9 +34,8 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._storage, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._storage.set).toHaveBeenCalled();
+			expect(this.chrome.storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){
@@ -73,6 +65,19 @@ describe("TaskRepository", function(){
 			this.taskRepository.save(this.task);	
 			expect(Object.keys(this.taskRepository._tasks).length).toEqual(1);	
 		});
+	});
+
+	describe("fetchAll", function(){
+		beforeEach(function(){
+			spyOn(this.chrome.storage.sync, "get"); 
+		});
+
+		it("should call storage get function with null", function(){
+			this.taskRepository.fetchAll(this.observer.callback);
+			expect(this.chrome.storage.sync.get).toHaveBeenCalled();
+			expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
+				null, jasmine.any(Function));
+		})
 	});
 
 	describe("serializeTask", function(){

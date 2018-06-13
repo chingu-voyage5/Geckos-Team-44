@@ -5,7 +5,7 @@ function TaskRepository(storage){
 	this._tasks = {};
 };
 
-TaskRepository.prototype.save = function(task){
+TaskRepository.prototype.save = function(task, callback){
 	if (task.id === null)
 		task.id = uuid();
 	if (task.createdOn === null)
@@ -14,8 +14,9 @@ TaskRepository.prototype.save = function(task){
 
 	let copiedTask = Object.assign({}, task);
 	this._tasks[task.id] = copiedTask;
-	this._storage.set({[task.id]: this.serializeTask(copiedTask)});
-	return task;
+	this._storage.sync.set({[task.id]: this.serializeTask(copiedTask)}, function(){
+		callback(task);
+	});
 };
 
 TaskRepository.prototype.serializeTask = function(task){

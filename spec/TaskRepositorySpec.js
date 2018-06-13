@@ -1,21 +1,10 @@
 
 chromeMock = {
-	inMemoryStore: {},
 	storage: {
 		sync: {
-			set: function(keyValue, callback){
-				Object.keys(keyValue).forEach(function(key){
-					chromeMock.inMemoryStore[key] = JSON.stringify(keyValue[key]);
-				});
+			set: function(keyValue, callback){callback();
 			},
-			get: function(keys, callback){
-				let result = {};
-				for (key in keys) {
-					let value = chromeMock.inMemoryStore[key];
-					if (value !== undefined)
-						result[key] = JSON.parse(value);
-				}
-				callback(result);
+			get: function(keys, callback){callback();
 			}
 		}
 	}
@@ -23,9 +12,11 @@ chromeMock = {
 
 describe("TaskRepository", function(){
 	beforeEach(function(){
-		this.taskRepository = new TaskRepository(new ChromeStorage(chromeMock.storage)); 
+		this.taskRepository = new TaskRepository(chromeMock.storage); 
 		this.task = new Task();
 		this.task.title = "test";
+		spyOn(this.taskRepository._storage.sync, "set");
+		spyOn(this.taskRepository._storage.sync, "get");
 	});
 
 	describe("save", function(){
@@ -41,9 +32,8 @@ describe("TaskRepository", function(){
 		})
 
 		it("should call set in chrome storage", function(){
-			spyOn(this.taskRepository._storage, "set");
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._storage.set).toHaveBeenCalled();
+			expect(this.taskRepository._storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){
@@ -74,6 +64,16 @@ describe("TaskRepository", function(){
 			expect(Object.keys(this.taskRepository._tasks).length).toEqual(1);	
 		});
 	});
+
+	// describe("fetchAll", function(){
+	// 	describe("Given no tasks", function(){
+	// 		it("should fetch no tasks", function(){
+	// 			this.taskRepository.fetchAll(function(){
+
+	// 			});
+	// 		})
+	// 	});
+	// });
 
 	describe("serializeTask", function(){
 		it("should seralize date objects to json", function(){

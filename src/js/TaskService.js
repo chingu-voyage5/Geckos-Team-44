@@ -47,7 +47,7 @@ TaskService.prototype.listTasks = function(callback){
     this.taskRepository.fetchAll(function(error, result){
         let tasks = [];
         for (task of result.tasks){
-            if (!task.isCompleted())
+            if (task.completedOn === null)
                 tasks.push(task);
         }
         callback(error, {tasks: tasks});

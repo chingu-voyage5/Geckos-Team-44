@@ -84,7 +84,7 @@ describe("TaskService", function() {
                 let task2 = this.taskRepository.serializeTask(createTestTask("test2", "2"));
                 let task3 = this.taskRepository.serializeTask(createTestTask("test3", "3", true));
                 spyOn(this.chrome.storage.sync, "get").and.callFake(function(keys, callback){
-                    callback(null, {[task1.id]: task1, [task2.id]: task2, [task3.id]: task3});
+                    callback({[task1.id]: task1, [task2.id]: task2, [task3.id]: task3});
                 })
             });
 

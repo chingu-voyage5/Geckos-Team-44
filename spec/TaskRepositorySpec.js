@@ -1,22 +1,23 @@
 
 chromeMock = {
+	runtime: {
+		error: null
+	},
 	storage: {
 		sync: {
-			set: function(keyValue, callback){callback();
-			},
-			get: function(keys, callback){callback();
-			}
+			set: function(keyValues, callback){callback();},
+			get: function(keys, callback){callback();}
 		}
 	}
 }
 
 describe("TaskRepository", function(){
 	beforeEach(function(){
-		this.taskRepository = new TaskRepository(chromeMock.storage); 
+		this.chrome = chromeMock;
+		spyOn(this.chrome.storage.sync, "set");
+		this.taskRepository = new TaskRepository(this.chrome);
 		this.task = new Task();
 		this.task.title = "test";
-		spyOn(this.taskRepository._storage.sync, "set");
-		spyOn(this.taskRepository._storage.sync, "get");
 	});
 
 	describe("save", function(){
@@ -33,7 +34,7 @@ describe("TaskRepository", function(){
 
 		it("should call set in chrome storage", function(){
 			this.taskRepository.save(this.task);
-			expect(this.taskRepository._storage.sync.set).toHaveBeenCalled();
+			expect(this.chrome.storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should return a saved task with an uuid id", function(){
@@ -65,15 +66,21 @@ describe("TaskRepository", function(){
 		});
 	});
 
-	// describe("fetchAll", function(){
-	// 	describe("Given no tasks", function(){
-	// 		it("should fetch no tasks", function(){
-	// 			this.taskRepository.fetchAll(function(){
+	describe("fetchAll", function(){
+		beforeEach(function(){
+			spyOn(this.chrome.storage.sync, "get"); 
+			this.observer = jasmine.createSpyObj("observer", ["callback"]);
+		});
 
-	// 			});
-	// 		})
-	// 	});
-	// });
+		describe("Given no tasks", function(){
+			it("should fetch no tasks", function(){
+				this.taskRepository.fetchAll(this.observer.callback);
+				expect(this.chrome.storage.sync.get).toHaveBeenCalled();
+				expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
+					null, jasmine.any(Function));
+			})
+		});
+	});
 
 	describe("serializeTask", function(){
 		it("should seralize date objects to json", function(){

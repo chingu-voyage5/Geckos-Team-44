@@ -2,7 +2,7 @@
 
 describe("TaskService", function() {
     beforeEach(function(){
-        this.taskRepository = new TaskRepository(chromeMock.storage); 
+        this.taskRepository = new TaskRepository(chromeMock); 
         this.taskService = new TaskService(this.taskRepository);   
         this.observer = {callback: function(error, response){}};
         spyOn(this.observer, "callback");  

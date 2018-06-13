@@ -11,7 +11,8 @@ function Task(title="", mode="", timeBlocks=1, order=-1,
 	this.updatedOn = updatedOn;
 	this.completedOn = completedOn;
 	this.totalTimeSpent = totalTimeSpent;
-}
+	this.name = "Task";
+}	
 
 
 Task.prototype.isCompleted = function() {

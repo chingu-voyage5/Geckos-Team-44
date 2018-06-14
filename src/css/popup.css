@@ -1,47 +1,63 @@
-body {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+a {
+	text-decoration: none;
 }
 
-.navButtons {
+a:link, a:visited {
+	color: blue;
+}
+
+a:hover {
+	color: skyblue;
+}
+
+.navButtonsList {
+	display: grid;
+	grid-template-columns: repeat(4, 10rem);
+	list-style: none;
+	font-size: 30px;
+}
+
+.settingsButton {
 	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 1;
-	grid-row-end: 2;
+	grid-column-end: 3;
 }
 
 .taskList {
-	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 2;
-	grid-row-end: 3;
+	display: grid;
+	grid-template-columns: repeat(3, 10em);
+	grid-gap: 1rem;
+	grid-template-rows: repeat(4, 1em);
+	margin-left: 20px;
 }
 
 .newTaskButton {
-	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 3;
-	grid-row-end: 4;
+	display: grid;
+	grid-template-columns: repeat(4, 10em);
+	grid-gap: 2rem;
+	justify-content: center;
 }
 
 .currentTask {
-	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 4;
-	grid-row-end: 5;
+	display: grid;
+	grid-template-columns: repeat(3, 10em);
+	grid-gap: 2rem;
+	margin-left: 20px;
 }
 
 .pomodoro {
-	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 5;
-	grid-row-end: 6;
+	display: grid;
+	grid-template-columns: repeat(4, 10em);
+	grid-gap: 2rem;
+	grid-column-start: 2;
+	grid-column-end: 3;
+	justify-content: center;
 }
 
-.pomodoroControls {
-	grid-column-start: 1;
-	grid-column-end: span 3;
-	grid-row-start: 6;
-	grid-row-end: 7;
+.pomodoroButtonList {
+	display: grid;
+	grid-template-columns: repeat(3, 10em);
+	grid-template-rows: repeat(4, 1em);
+	list-style: none;
+	font-size: 20px;
+	margin-left: 60px;
 }

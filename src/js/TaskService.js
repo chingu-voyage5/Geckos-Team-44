@@ -4,6 +4,12 @@ function InvalidRequestError(message){
     this.message = message;
 }
 
+function TaskNotFoundError(message){
+    this.name = "InvalidRequestError";
+    this.message = message;
+}
+
+
 function TaskService(taskRepository){
     this.taskRepository = taskRepository;
 }
@@ -37,8 +43,8 @@ TaskService.prototype.addTask = function(request, callback){
         callback(new InvalidRequestError(errors), null);
     } else {
         let task = new Task(request.title, request.mode, request.timeBlocks);
-        this.taskRepository.save(task, function(){
-            callback(null, {"task": task});
+        this.taskRepository.save(task, function(error, result){
+            callback(null, {task: task});
         });
     }
 };
@@ -52,5 +58,28 @@ TaskService.prototype.listTasks = function(callback){
         }
         callback(error, {tasks: tasks});
     })
-}
+};
+
+TaskService.prototype.editTask = function(request, callback){
+    var taskRepository = this.taskRepository;
+    var taskService = this;
+
+    taskRepository.fetch(request.id, function(task){
+        if (!task)
+            return callback(new TaskNotFoundError("Task not found"), null);
+        
+        let errors = taskService.validateRequest(request);
+        if (errors)
+            return callback(new InvalidRequestError(errors), null);
+
+        task.title = request.title;
+        task.timeBlocks = request.timeBlocks;
+        task.mode = request.mode;
+        
+        taskRepository.save(task, function(error, result){ 
+            callback(error, {task: result});
+        });
+    });
+
+};
 

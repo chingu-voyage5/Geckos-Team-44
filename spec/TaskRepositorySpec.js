@@ -1,15 +1,4 @@
 
-chromeMock = {
-	runtime: {
-		error: null
-	},
-	storage: {
-		sync: {
-			set: function(keyValues, callback){callback();},
-			get: function(keys, callback){callback();}
-		}
-	}
-}
 
 describe("TaskRepository", function(){
 	beforeEach(function(){

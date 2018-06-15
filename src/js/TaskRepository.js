@@ -42,6 +42,11 @@ TaskRepository.prototype.fetch = function(taskId, callback){
 	});
 };
 
+TaskRepository.prototype.delete = function(taskId, callback){
+	this._chrome.storage.sync.remove([taskId]);
+	callback(taskId);
+};
+
 TaskRepository.prototype.serializeTask = function(task){
 	Object.keys(task).forEach(function(key){
 		if (task[key] instanceof Date)

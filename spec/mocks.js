@@ -22,7 +22,15 @@ chromeMock = {
                     if (result)
                         results[key] = result;
                 }
-                callback(results);}
+                callback(results);},
+            
+            remove: function(keys, callback){
+                for (key of keys){
+                    delete chromeMock.storage.data[key];
+                }
+                if (callback !== undefined)
+                    callback();
+            }
 		}
 	}
 }

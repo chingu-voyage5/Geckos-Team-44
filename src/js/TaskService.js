@@ -14,7 +14,7 @@ function TaskService(taskRepository){
     this.taskRepository = taskRepository;
 }
 
-TaskService.prototype.validateRequest = function(request){
+TaskService.prototype.validateSaveRequest = function(request){
     let errors = [];
 
     if (request.title === "")
@@ -37,8 +37,16 @@ TaskService.prototype.validateRequest = function(request){
     return null;
 };
 
+TaskService.prototype.handleTaskNotFound = function(task, callback){
+    return callback(new TaskNotFoundError("Task not found"), null);
+}
+
+TaskService.prototype.handleInvalidRequest = function(errors, callback){
+    return callback(new InvalidRequestError(errors), null);
+}
+
 TaskService.prototype.addTask = function(request, callback){
-    let errors = this.validateRequest(request);
+    let errors = this.validateSaveRequest(request);
     if (errors){
         callback(new InvalidRequestError(errors), null);
     } else {
@@ -60,17 +68,31 @@ TaskService.prototype.listTasks = function(callback){
     })
 };
 
+TaskService.prototype.deleteTask = function(request, callback){
+    var taskRepository = this.taskRepository;
+    var taskService = this;
+    
+    taskRepository.fetch(request.id, function(task){
+        if (!task)
+        return taskService.handleTaskNotFound(task, callback);
+
+        taskRepository.delete(task.id, function(taskId){
+            callback(null, {taskId: taskId});
+        });
+    });
+};
+
 TaskService.prototype.editTask = function(request, callback){
     var taskRepository = this.taskRepository;
     var taskService = this;
 
     taskRepository.fetch(request.id, function(task){
         if (!task)
-            return callback(new TaskNotFoundError("Task not found"), null);
+            return taskService.handleTaskNotFound(task, callback);
         
-        let errors = taskService.validateRequest(request);
+        let errors = taskService.validateSaveRequest(request);
         if (errors)
-            return callback(new InvalidRequestError(errors), null);
+            return taskService.handleInvalidRequest(errors, callback);
 
         task.title = request.title;
         task.timeBlocks = request.timeBlocks;

@@ -48,7 +48,7 @@ TaskService.prototype.handleInvalidRequest = function(errors, callback){
 TaskService.prototype.addTask = function(request, callback){
     let errors = this.validateSaveRequest(request);
     if (errors){
-        callback(new InvalidRequestError(errors), null);
+        return this.handleInvalidRequest(errors, callback);
     } else {
         let task = new Task(request.title, request.mode, request.timeBlocks);
         this.taskRepository.save(task, function(error, result){
@@ -74,7 +74,7 @@ TaskService.prototype.deleteTask = function(request, callback){
     
     taskRepository.fetch(request.id, function(task){
         if (!task)
-        return taskService.handleTaskNotFound(task, callback);
+            return taskService.handleTaskNotFound(task, callback);
 
         taskRepository.delete(task.id, function(taskId){
             callback(null, {taskId: taskId});
@@ -93,7 +93,7 @@ TaskService.prototype.editTask = function(request, callback){
         let errors = taskService.validateSaveRequest(request);
         if (errors)
             return taskService.handleInvalidRequest(errors, callback);
-
+        
         task.title = request.title;
         task.timeBlocks = request.timeBlocks;
         task.mode = request.mode;

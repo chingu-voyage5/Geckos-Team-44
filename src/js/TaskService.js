@@ -47,14 +47,12 @@ TaskService.prototype.handleInvalidRequest = function(errors, callback){
 
 TaskService.prototype.addTask = function(request, callback){
     let errors = this.validateSaveRequest(request);
-    if (errors){
+    if (errors)
         return this.handleInvalidRequest(errors, callback);
-    } else {
-        let task = new Task(request.title, request.mode, request.timeBlocks);
-        this.taskRepository.save(task, function(error, result){
-            callback(null, {task: task});
-        });
-    }
+    let task = new Task(request.title, request.mode, request.timeBlocks);
+    this.taskRepository.save(task, function(error, result){
+        callback(null, {task: task});
+    });
 };
 
 TaskService.prototype.listTasks = function(callback){

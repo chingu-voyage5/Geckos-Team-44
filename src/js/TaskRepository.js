@@ -12,7 +12,7 @@ TaskRepository.prototype.save = function(task, callback){
 		task.createdOn = new Date();
 	task.updatedOn = new Date();
 
-	let copiedTask = Object.assign({}, task);
+	let copiedTask = Object.assign(new Task(), task);
 	this._tasks[task.id] = copiedTask;
 
 	this._chrome.storage.sync.set({[task.id]: this.serializeTask(copiedTask)}, function(){
@@ -21,20 +21,28 @@ TaskRepository.prototype.save = function(task, callback){
 };
 
 TaskRepository.prototype.fetchAll = function(callback){
-	let unserializeTask = this.unserializeTask;
+	let taskRepository = this;
 	this._chrome.storage.sync.get(null, function(result){
 		let tasks = [];
-		for (key in result)
-			if (result[key].hasOwnProperty("name") && result[key].name == "Task")
-				tasks.push(unserializeTask(result[key]));
+		for (key in result){
+			let task = result[key];
+			if (task.hasOwnProperty("name") && task.name == "Task"){
+				tasks.push(taskRepository.unserializeTask(task));
+				let copiedTask = Object.assign(new Task(), task);
+				taskRepository._tasks[task.id] = copiedTask;
+			}	
+		}
 		callback(null, {tasks: tasks});
 	});
 }
 
 TaskRepository.prototype.fetch = function(taskId, callback){
 	let unserializeTask = this.unserializeTask;
+	let task = this._tasks[taskId];
+	if (task)
+		return callback(unserializeTask(task));
 	this._chrome.storage.sync.get([taskId], function(result){
-		let task = result[taskId];
+		task = result[taskId];
 		if (task)
 			callback(unserializeTask(task));
 		else
@@ -44,6 +52,7 @@ TaskRepository.prototype.fetch = function(taskId, callback){
 
 TaskRepository.prototype.delete = function(taskId, callback){
 	this._chrome.storage.sync.remove([taskId]);
+	delete this._tasks[taskId];
 	callback(taskId);
 };
 

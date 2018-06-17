@@ -3,17 +3,21 @@
 describe("TaskRepository", function(){
 	beforeEach(function(){
 		this.chrome = chromeMock;
-		spyOn(this.chrome.storage.sync, "set");
+		this.setSpy = spyOn(this.chrome.storage.sync, "set");
+		this.getSpy = spyOn(this.chrome.storage.sync, "get");
+		this.removeSpy = spyOn(this.chrome.storage.sync, "remove");
 		this.taskRepository = new TaskRepository(this.chrome);
+		this.observer = {callback: function(error, response){}};
+        spyOn(this.observer, "callback");  
 		this.task = new Task();
 		this.task.title = "test";
-		this.observer = jasmine.createSpyObj("observer", ["callback"]);
 	});
 
 	describe("save", function(){
-		it("should save task", function(){
-			this.taskRepository.save(this.task);
+		it("should save task to in memory and chrome stortage", function(){
+			this.taskRepository.save(this.task, function(){});
 			expect(this.taskRepository._tasks[this.task.id].title).toEqual("test");
+			expect(this.chrome.storage.sync.set).toHaveBeenCalled();
 		});
 
 		it("should save a copied task that cannot be modified by original task changes", function(){
@@ -57,16 +61,43 @@ describe("TaskRepository", function(){
 	});
 
 	describe("fetchAll", function(){
-		beforeEach(function(){
-			spyOn(this.chrome.storage.sync, "get"); 
-		});
-
 		it("should call storage get function with null", function(){
-			this.taskRepository.fetchAll(this.observer.callback);
+			this.taskRepository.fetchAll(function(){});
 			expect(this.chrome.storage.sync.get).toHaveBeenCalled();
 			expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
 				null, jasmine.any(Function));
 		})
+
+		it("should store tasks in-memory", function(){
+			let task = new Task();
+			task.id = "1";
+			this.getSpy.and.callFake(function(keys, callback){
+				callback({[task.id]: task});});
+			this.taskRepository.fetchAll(function(){});
+			expect(this.taskRepository._tasks).toEqual({[task.id]: task})
+		});
+	});
+
+	describe("delete", function(){
+		it("should remove task from in-memory", function(){
+			let task = new Task();
+			task.id = "1";
+			this.taskRepository._tasks[task.id] = task;
+			this.taskRepository.delete(task.id, function(){});
+			expect(this.taskRepository._tasks).toEqual({});
+		});
+	})
+
+	describe("fetch", function(){
+		it("should return in-memory object if found", function(){
+			let task = new Task();
+			task.id = "1";
+			this.taskRepository._tasks[task.id] = task;	
+			this.taskRepository.fetch(task.id, this.observer.callback);
+			expect(this.observer.callback).toHaveBeenCalledWith(
+				jasmine.objectContaining({id: task.id})
+			);
+		});
 	});
 
 	describe("serializeTask", function(){

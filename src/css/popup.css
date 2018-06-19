@@ -1,0 +1,74 @@
+a {
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	color: blue;
+}
+
+a:hover {
+	color: skyblue;
+}
+
+.wrapper {
+	display: grid;
+	grid-template-columns: 100px 1fr 100px;
+	justify-items: center;
+}
+
+.settingsButton {
+	grid-column-start: 1;
+	grid-column-end: 2;
+	font-size: 30px;
+}
+
+.activityButton {
+	grid-column-start: 3;
+	grid-column-end: 4;
+	font-size: 30px;
+}
+
+.taskList {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+}
+
+.wrapper ul {
+	list-style-type: none;
+	-webkit-padding-start: 0px;
+}
+
+.wrapper ul li {
+	display: inline;
+}
+
+.newTaskButton {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+}
+
+.currentTask {
+	grid-column-start: 1;
+	grid-column-end: span 3;
+}
+
+.pomodoro {
+	grid-column-start: 2;
+	grid-column-end: span 1;
+}
+
+.pomodoroStart {
+	grid-column-start: 1;
+	grid-column-end: span 1;
+}
+
+.pomodoroPause {
+	grid-column-start: 2;
+	grid-column-end: span 1;
+}
+
+.pomodoroStop {
+	grid-column-start: 3;
+	grid-column-end: span 1;
+}
+

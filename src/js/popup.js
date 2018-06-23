@@ -1,7 +1,7 @@
 
 
 class TaskFormView {
-    constructor(taskElement) {
+    constructor(taskElement=null) {
         this.taskElement = taskElement;
         this.taskFormDiv = $("<div></div>", { class: "taskForm" });
         this.saveBtn = $("<button>Save</button>");
@@ -40,6 +40,11 @@ class TaskFormView {
         this.saveBtn.click(function () {
             taskFormView.onSave();
         });
+
+        titleInput.keydown(function(event){
+            if (event.which === 13)
+                taskFormView.onSave();
+        })
         
         this.cancelBtn.click(function () {
             taskFormView.onCancel();
@@ -55,7 +60,7 @@ class TaskFormView {
 };
 
 
-function showTask(tasksList, task){
+function showTask(task){
     let taskDiv = $("<ul></ul>", {id: task.id}),
         taskMode = $("<li></li>", {class: "taskIcon"}),
         taskIcon = $("<i></i>", {class: "fas"}),
@@ -71,7 +76,8 @@ function showTask(tasksList, task){
     taskBlocks.text(task.timeBlocks);
     taskMode.append(taskIcon);
     taskDiv.append([taskMode, taskName, taskBlocks]);
-    tasksList.append(taskDiv);
+
+    return taskDiv;
 };
 
 function showErrors(errors){
@@ -85,24 +91,75 @@ function showErrors(errors){
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
-        addTaskForm = new TaskFormView(newTaskBtn);
+        addTaskForm = new TaskFormView(newTaskBtn),
+        editTaskForm = new TaskFormView(),
+        editMode = false,
+        addMode = false;
     
     chrome.runtime.getBackgroundPage(function(page){
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.listTasks(function(error, response){
                 response.tasks.forEach(function(task){
-                    showTask(tasksList, task);
+                    tasksList.prepend(showTask(task));
                 });
             });
         });
     });
 
+    tasksList.on('dblclick', "ul", function(){
+        if (!editMode && !addMode) {
+            let taskId = this.id;
+            let taskElement = $("#" + taskId);
+            editTaskForm.taskElement = taskElement;
+     
+            chrome.runtime.getBackgroundPage(function(page){
+                page.taskRepository.fetch(taskId, function(task){
+                    editMode = true;
+                    editTaskForm.render(task);
+                }); 
+            });
+        }
+    });
+
+    editTaskForm.onCancel = function(){
+        this.resetForm();
+        editMode = false;
+    };
+
+
+    editTaskForm.onSave = function(){
+        let mode = $("#modeSelect").val(),
+            title = $("#titleInput").val(),
+            timeBlocks = $("#timeBlocksInput").val(),
+            id = editTaskForm.taskElement[0].id;
+        
+        let request = {id: id, mode: mode, 
+            title: title, timeBlocks: timeBlocks};
+        
+        chrome.runtime.getBackgroundPage(function(page){
+            page.taskService.editTask(request, function(error, response){
+                if (error){
+                    showErrors(error.message);
+                } else {
+                    editTaskForm.taskElement.replaceWith(
+                        showTask(response.task));
+                    editTaskForm.resetForm();
+                    editMode = false;
+                }
+            });
+        });
+    };
+
     newTaskBtn.click(function(){ 
-        addTaskForm.render();
+        if (!editMode && !addMode){
+            addMode = true;
+            addTaskForm.render();
+        }
     });
 
     addTaskForm.onCancel = function(){
         addTaskForm.resetForm();
+        addMode = false;
     };
 
     addTaskForm.onSave = function(){
@@ -111,13 +168,15 @@ $(document).ready(function(){
             timeBlocks = $("#timeBlocksInput").val();
 
         let request = {mode: mode, title: title, timeBlocks: timeBlocks};
+    
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.addTask(request, function(error, response){
                 if (error){
                     showErrors(error.message);
                 } else {
-                    showTask(tasksList, response.task);
+                    tasksList.append(showTask(response.task));
                     addTaskForm.resetForm();
+                    addMode = false;
                 }   
             });
         });

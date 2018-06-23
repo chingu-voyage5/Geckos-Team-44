@@ -31,6 +31,8 @@ a:hover {
 .taskList {
 	grid-column-start: 1;
 	grid-column-end: span 3;
+	cursor: pointer;
+	user-select: none;
 }
 
 .wrapper ul {

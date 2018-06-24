@@ -12,9 +12,10 @@ class TaskFormView {
     }
 
     showErrors(errors){
-        this.errorsList.empty();
+        let errorsList = this.errorsList;
+        errorsList.empty();
         errors.forEach(function(error){
-            this.errorsList.append($("<div></div>").text(error))
+            errorsList.append($("<div></div>").text(error))
         });
     }
 

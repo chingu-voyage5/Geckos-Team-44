@@ -1,8 +1,8 @@
 
 
 class TaskFormView {
-    constructor(taskElement=null) {
-        this.taskElement = taskElement;
+    constructor(taskDiv=null) {
+        this.taskDiv = taskDiv;
         this.taskFormDiv = $("<div></div>", { class: "taskForm" });
         this.saveBtn = $("<button>Save</button>");
         this.cancelBtn = $("<button>Cancel</button>");
@@ -11,7 +11,7 @@ class TaskFormView {
         this.onSave = function(){};
     }
 
-    render(task = { mode: "work", title: "", timeBlocks: 1 }) {
+    render(task={ mode: "work", title: "", timeBlocks: 1 }) {
         let form = $("<ul></ul>"),
             modeDiv = $("<li></li>"),
             titleDiv = $("<li></li>"),
@@ -22,8 +22,6 @@ class TaskFormView {
             taskFormView = this;
         
         this.taskFormDiv.show();
-        this.taskElement.hide();
-        this.taskFormDiv.insertBefore(this.taskElement);
 
         modeSelect.append(["<option value='work'>Work</option>",
             "<option value='play'>Play</option>"]);
@@ -49,16 +47,39 @@ class TaskFormView {
         this.cancelBtn.click(function () {
             taskFormView.onCancel();
         });   
+
+        return this.taskFormDiv;
     }
 
     resetForm(){
         this.taskFormDiv.hide();
-        this.taskElement.show();
         this.errorsList.empty();
         this.taskFormDiv.empty();
     }
 };
 
+class TaskView {
+    render(task){
+        let taskDiv = $("<ul></ul>", {id: task.id}),
+            taskMode = $("<li></li>", {class: "taskIcon"}),
+            taskIcon = $("<i></i>", {class: "fas"}),
+            taskName = $("<li></li>", {class: "taskName"}),
+            taskBlocks = $("<li></li>", {class: "taskBlocks"});
+    
+        if (task.mode === "work") 
+            taskIcon.addClass("fa-briefcase");
+        else if (task.mode === "play")
+            taskIcon.addClass("fa-paper-plane");
+    
+        taskName.text(task.title);
+        taskBlocks.text(task.timeBlocks);
+        taskMode.append(taskIcon);
+        taskDiv.append([taskMode, taskName, taskBlocks]);
+    
+        return taskDiv;
+    };
+    
+}
 
 function showTask(task){
     let taskDiv = $("<ul></ul>", {id: task.id}),
@@ -80,6 +101,7 @@ function showTask(task){
     return taskDiv;
 };
 
+
 function showErrors(errors){
     let errorsList = $("#errorsList");
     errorsList.empty();
@@ -91,8 +113,10 @@ function showErrors(errors){
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
-        addTaskForm = new TaskFormView(newTaskBtn),
+        taskDiv = null;
+        addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
+        taskView = new TaskView(),
         editMode = false,
         addMode = false;
     
@@ -100,7 +124,7 @@ $(document).ready(function(){
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.listTasks(function(error, response){
                 response.tasks.forEach(function(task){
-                    tasksList.prepend(showTask(task));
+                    tasksList.prepend(taskView.render(task));
                 });
             });
         });
@@ -109,13 +133,13 @@ $(document).ready(function(){
     tasksList.on('dblclick', "ul", function(){
         if (!editMode && !addMode) {
             let taskId = this.id;
-            let taskElement = $("#" + taskId);
-            editTaskForm.taskElement = taskElement;
+            taskDiv = $("#" + taskId);
+            taskDiv.hide();
      
             chrome.runtime.getBackgroundPage(function(page){
                 page.taskRepository.fetch(taskId, function(task){
                     editMode = true;
-                    editTaskForm.render(task);
+                    editTaskForm.render(task).insertBefore(taskDiv);
                 }); 
             });
         }
@@ -123,6 +147,7 @@ $(document).ready(function(){
 
     editTaskForm.onCancel = function(){
         this.resetForm();
+        taskDiv.show();
         editMode = false;
     };
 
@@ -131,7 +156,7 @@ $(document).ready(function(){
         let mode = $("#modeSelect").val(),
             title = $("#titleInput").val(),
             timeBlocks = $("#timeBlocksInput").val(),
-            id = editTaskForm.taskElement[0].id;
+            id = taskDiv[0].id;
         
         let request = {id: id, mode: mode, 
             title: title, timeBlocks: timeBlocks};
@@ -141,8 +166,7 @@ $(document).ready(function(){
                 if (error){
                     showErrors(error.message);
                 } else {
-                    editTaskForm.taskElement.replaceWith(
-                        showTask(response.task));
+                    taskDiv.replaceWith(taskView.render(response.task));
                     editTaskForm.resetForm();
                     editMode = false;
                 }
@@ -153,11 +177,13 @@ $(document).ready(function(){
     newTaskBtn.click(function(){ 
         if (!editMode && !addMode){
             addMode = true;
-            addTaskForm.render();
+            newTaskBtn.hide();
+            addTaskForm.render().insertBefore(newTaskBtn);
         }
     });
 
     addTaskForm.onCancel = function(){
+        newTaskBtn.show();
         addTaskForm.resetForm();
         addMode = false;
     };
@@ -174,7 +200,8 @@ $(document).ready(function(){
                 if (error){
                     showErrors(error.message);
                 } else {
-                    tasksList.append(showTask(response.task));
+                    tasksList.append(taskView.render(response.task));
+                    newTaskBtn.show();
                     addTaskForm.resetForm();
                     addMode = false;
                 }   

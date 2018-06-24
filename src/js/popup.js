@@ -11,6 +11,13 @@ class TaskFormView {
         this.onSave = function(){};
     }
 
+    showErrors(errors){
+        this.errorsList.empty();
+        errors.forEach(function(error){
+            this.errorsList.append($("<div></div>").text(error))
+        });
+    }
+
     render(task={ mode: "work", title: "", timeBlocks: 1 }) {
         let form = $("<ul></ul>"),
             modeDiv = $("<li></li>"),
@@ -58,29 +65,6 @@ class TaskFormView {
     }
 };
 
-class TaskView {
-    render(task){
-        let taskDiv = $("<ul></ul>", {id: task.id}),
-            taskMode = $("<li></li>", {class: "taskIcon"}),
-            taskIcon = $("<i></i>", {class: "fas"}),
-            taskName = $("<li></li>", {class: "taskName"}),
-            taskBlocks = $("<li></li>", {class: "taskBlocks"});
-    
-        if (task.mode === "work") 
-            taskIcon.addClass("fa-briefcase");
-        else if (task.mode === "play")
-            taskIcon.addClass("fa-paper-plane");
-    
-        taskName.text(task.title);
-        taskBlocks.text(task.timeBlocks);
-        taskMode.append(taskIcon);
-        taskDiv.append([taskMode, taskName, taskBlocks]);
-    
-        return taskDiv;
-    };
-    
-}
-
 function showTask(task){
     let taskDiv = $("<ul></ul>", {id: task.id}),
         taskMode = $("<li></li>", {class: "taskIcon"}),
@@ -102,13 +86,7 @@ function showTask(task){
 };
 
 
-function showErrors(errors){
-    let errorsList = $("#errorsList");
-    errorsList.empty();
-    errors.forEach(function(error){
-        errorsList.append($("<div></div>").text(error))
-    });
-}
+
 
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
@@ -116,7 +94,6 @@ $(document).ready(function(){
         taskDiv = null;
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
-        taskView = new TaskView(),
         editMode = false,
         addMode = false;
     
@@ -124,7 +101,7 @@ $(document).ready(function(){
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.listTasks(function(error, response){
                 response.tasks.forEach(function(task){
-                    tasksList.prepend(taskView.render(task));
+                    tasksList.prepend(showTask(task));
                 });
             });
         });
@@ -164,9 +141,9 @@ $(document).ready(function(){
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.editTask(request, function(error, response){
                 if (error){
-                    showErrors(error.message);
+                    editTaskForm.showErrors(error.message);
                 } else {
-                    taskDiv.replaceWith(taskView.render(response.task));
+                    taskDiv.replaceWith(showTask(response.task));
                     editTaskForm.resetForm();
                     editMode = false;
                 }
@@ -198,9 +175,9 @@ $(document).ready(function(){
         chrome.runtime.getBackgroundPage(function(page){
             page.taskService.addTask(request, function(error, response){
                 if (error){
-                    showErrors(error.message);
+                    addTaskForm.showErrors(error.message)
                 } else {
-                    tasksList.append(taskView.render(response.task));
+                    tasksList.append(showTask(response.task));
                     newTaskBtn.show();
                     addTaskForm.resetForm();
                     addMode = false;

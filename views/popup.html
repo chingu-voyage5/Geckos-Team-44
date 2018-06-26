@@ -3,16 +3,17 @@
         <title>WorkPlay Pomodoro</title>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         <link rel="stylesheet" href="../src/css/popup.css">
+        <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Maven+Pro" rel="stylesheet">
         <script src="../lib/jquery-3.3.1.js"></script>
         <script src="../src/js/popup.js"></script>
     </head>
     <body>
         <div class="wrapper">
                 <div class="settingsButton">
-                    <a href="#"><i class="fas fa-cog settings"></i>
+                    <button><a href="#"><i class="fas fa-cog settings"></i></button>
                 </div>
                 <div class="activityButton">
-                    <a href="#"><i class="fas fa-chart-area activity"></i></a>
+                   <button><a href="#"><i class="fas fa-chart-area activity"></i></a></button>
                 </div>
             
             <h3>What to do today?</h3>
@@ -35,16 +36,16 @@
 		    </div>
 		
 		    <div class="newTaskButton">
-                <p><a href="#"><i class="fas fa-plus"></i> add new task</a></p>
+                <button><a href="#"><i class="fas fa-plus"></i> Add New Task</a></button>
 		    </div>
 
             <div class="currentTask">
-                <h3>What to do today?</h3>
+                <h3>Current Task List:</h3>
                 <ul>
                     <li class="taskIcon">
                         <i class="fas fa-paper-plane"></i>
                     </li>
-                    <li class="taskName">
+                    <li class="taskName playItem">
                         Watch youtube videos
                     </li>
                     <li class="taskBlocks"></li>
@@ -52,7 +53,7 @@
                 <ul>
                     <li class="taskIcon">
                         <i class="fas fa-briefcase"></i></li>
-                    <li class="taskName">Debug JavaScript</li>
+                    <li class="taskName workItem">Debug JavaScript</li>
                     <li class="taskBlocks"></li>
                 </ul>
             </div>
@@ -62,13 +63,13 @@
 		    </div>
 		
             <div class="pomodoroStart">
-                <a href="#"><i class="fas fa-play-circle"></i></a>
+                <button><a href="#"><i class="fas fa-play-circle"></i></a></button>
             </div>
             <div class="pomodoroPause">
-                <a href="#"><i class="fas fa-pause-circle"></i></a>
+                <button><a href="#"><i class="fas fa-pause-circle"></i></a></button>
             </div>
             <div class="pomodoroStop">
-                <a href="#"><i class="fas fa-stop-circle"></i></a>
+                <button><a href="#"><i class="fas fa-stop-circle"></i></a></button>
             </div>
         </div>
     </body>

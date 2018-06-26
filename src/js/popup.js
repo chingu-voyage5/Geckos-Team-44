@@ -72,7 +72,7 @@ function showTask(task){
         taskIcon = $("<i></i>", {class: "fas"}),
         taskName = $("<li></li>", {class: "taskName"}),
         taskBlocks = $("<li></li>", {class: "taskBlocks"});
-
+    
     if (task.mode === "work") 
         taskIcon.addClass("fa-briefcase");
     else if (task.mode === "play")
@@ -92,21 +92,21 @@ function showTask(task){
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
-        taskDiv = null;
+        taskDiv = null,
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
         editMode = false,
         addMode = false;
     
+
     chrome.runtime.getBackgroundPage(function(page){
-        chrome.runtime.getBackgroundPage(function(page){
-            page.taskService.listTasks(function(error, response){
-                response.tasks.forEach(function(task){
-                    tasksList.prepend(showTask(task));
-                });
+        page.taskService.listTasks(function(error, response){
+            response.tasks.forEach(function(task){
+                tasksList.prepend(showTask(task));
             });
         });
     });
+  
 
     tasksList.on('dblclick', "ul", function(){
         if (!editMode && !addMode) {

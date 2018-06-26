@@ -10,6 +10,31 @@ a:hover {
 	color: skyblue;
 }
 
+h3 {
+	grid-column-start: 2;
+	grid-column-end: 3;
+	font-family: 'Maven Pro', sans-serif;
+}
+
+button {
+	font-family: 'Maven Pro', sans-serif;
+	padding: 12px;
+	background-color: white;
+	border-radius: 25%;
+	border: 2px solid blue;
+	font-size: 20px;
+}
+
+button:hover {
+	background-color: blue;
+	transition: .5s ease;
+}
+
+button:hover a {
+	color: skyblue;
+	transition: .5s ease;
+}
+
 .wrapper {
 	display: grid;
 	grid-template-columns: 100px 1fr 100px;
@@ -57,6 +82,7 @@ a:hover {
 .pomodoro {
 	grid-column-start: 2;
 	grid-column-end: span 1;
+	font-family: 'Maven Pro', sans-serif;
 }
 
 .pomodoroStart {
@@ -72,5 +98,13 @@ a:hover {
 .pomodoroStop {
 	grid-column-start: 3;
 	grid-column-end: span 1;
+}
+
+.playItem {
+	font-family: 'Gloria Hallelujah', cursive;
+}
+
+.workItem {
+	font-family: 'Maven Pro', sans-serif;
 }
 

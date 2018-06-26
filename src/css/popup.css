@@ -108,3 +108,11 @@ button:hover a {
 	font-family: 'Maven Pro', sans-serif;
 }
 
+.taskBlocks {
+	float:right;
+	width: 7px;
+	height: 7px;
+	margin: 2px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background-color: blue;
+}

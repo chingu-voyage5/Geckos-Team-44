@@ -93,6 +93,8 @@ $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
         taskDiv = null,
+        startTimerBtn = $(".pomodoroStart"),
+        pomodoro = $(".pomodoro");
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
         editMode = false,
@@ -106,7 +108,6 @@ $(document).ready(function(){
             });
         });
     });
-  
 
     tasksList.on('dblclick', "ul", function(){
         if (!editMode && !addMode) {
@@ -186,4 +187,33 @@ $(document).ready(function(){
             });
         });
     };
+
+    // Pomodoro Timer Events
+
+    function showPomodoroTimer(element, time){
+        let timerElement = $("<h2></h2>").text(time);
+        element.empty();
+        element.append(timerElement);
+    };
+
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+        if (request.command === "updateTime"){
+            showPomodoroTimer(pomodoro, request.time);
+        }
+    });
+
+    startTimerBtn.click(function(){
+        console.log("start button clicked");
+        chrome.runtime.getBackgroundPage(function(page){
+            let currentTask = $(".taskList ul").first()[0];
+            if (currentTask){
+                page.taskRepository.fetch(currentTask.id, function(task){
+                    page.pomodoroTimer.start(task, function(time){
+                        showPomodoroTimer(pomodoro, time);
+                    });
+                });               
+            }   
+        });
+    });
+
 });

@@ -114,6 +114,7 @@ $(document).ready(function(){
         tasksList = $(".taskList"),
         startTimerBtn = $(".pomodoroStart"),
         stopTimerBtn = $(".pomodoroStop"),
+        pauseTimerBtn = $(".pomodoroPause"),
         pomodoro = $(".pomodoro"),
         currentTaskDiv = $(".currentTask"),
         addTaskForm = new TaskFormView(),
@@ -254,4 +255,12 @@ $(document).ready(function(){
             });
         }    
     })
+
+    pauseTimerBtn.click(function(){
+        if (timerStarted){
+            chrome.runtime.getBackgroundPage(function(page){
+                page.pomodoroTimer.pause(function(){});
+            });
+        }
+    });
 });

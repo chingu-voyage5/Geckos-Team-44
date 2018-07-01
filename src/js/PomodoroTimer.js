@@ -5,6 +5,7 @@ class PomodoroTimer{
         this.interval = null;
         this.timeBlockSize = timeBlockSize;
         this.timerStarted = false;
+        this.paused = false;
         this.delay = 1000;
         this.time = null;
     }
@@ -14,16 +15,17 @@ class PomodoroTimer{
         this.time = this.timeBlockSize * this.currentTask.timeBlocks;
         this.timerStarted = true; 
         callback(this.time);
+    	this.interval = setInterval(this.updateTime.bind(this), this.delay);
+    }
 
-    	this.interval = setInterval(function(){
-            if (this.time > 0){
-                this.time--;
-                chrome.runtime.sendMessage({command: "updateTime", time: this.time});
-            } else {
-                this.timerStarted = false;
-                clearInterval(this.interval);
-            }      
-        }.bind(this), this.delay);
+    updateTime(){
+        if (this.time > 0){
+            this.time--;
+            chrome.runtime.sendMessage({command: "updateTime", time: this.time});
+        } else {
+            this.timerStarted = false;
+            clearInterval(this.interval);
+        }  
     }
 
     stop(callback){
@@ -31,6 +33,17 @@ class PomodoroTimer{
         this.time = null;
         this.timerStarted = false;
         clearInterval(this.interval);
+        callback();
+    }
+
+    pause(callback){
+        if (this.paused){
+            this.interval = setInterval(this.updateTime.bind(this), this.delay);    
+            this.paused = false;
+        } else {
+            clearInterval(this.interval)
+            this.paused = true;
+        } 
         callback();
     }
 

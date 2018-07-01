@@ -26,6 +26,14 @@ class PomodoroTimer{
         }.bind(this), this.delay);
     }
 
+    stop(callback){
+        this.currentTask = null;
+        this.time = null;
+        this.timerStarted = false;
+        clearInterval(this.interval);
+        callback();
+    }
+
     loadTimer(callback){
         if (this.currentTask && this.timerStarted){
             chrome.runtime.sendMessage({command: "updateTime", time: this.time});  

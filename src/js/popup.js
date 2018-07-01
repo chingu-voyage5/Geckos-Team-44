@@ -109,16 +109,16 @@ function showCurrentTask(element, task){
 }
 
 
-
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
-        taskDiv = null,
         startTimerBtn = $(".pomodoroStart"),
+        stopTimerBtn = $(".pomodoroStop"),
         pomodoro = $(".pomodoro"),
         currentTaskDiv = $(".currentTask"),
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
+        taskDiv = null,
         editMode = false,
         addMode = false,
         timerStarted = false;
@@ -211,6 +211,12 @@ $(document).ready(function(){
     };
 
     // Pomodoro Timer Events
+    function resetTimer(){
+        timerStarted = false;
+        pomodoro.empty();
+        currentTaskDiv.empty();
+    };
+
     chrome.runtime.getBackgroundPage(function(page){
         page.pomodoroTimer.loadTimer(function(response){
             timerStarted = response.timerStarted;
@@ -238,4 +244,14 @@ $(document).ready(function(){
             }   
         });
     });
+
+    stopTimerBtn.click(function(){
+        if (timerStarted){
+            chrome.runtime.getBackgroundPage(function(page){
+                page.pomodoroTimer.stop(function(){
+                    resetTimer();
+                });
+            });
+        }    
+    })
 });

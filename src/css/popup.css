@@ -39,6 +39,7 @@ button:hover a {
 	display: grid;
 	grid-template-columns: 100px 1fr 100px;
 	justify-items: center;
+	width: 260px;
 }
 
 .settingsButton {

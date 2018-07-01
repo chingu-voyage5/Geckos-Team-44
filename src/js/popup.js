@@ -87,16 +87,42 @@ function showTask(task){
 };
 
 
+function formatTimerDisplay(secs){
+    let hours = Math.floor(secs / 3600),
+        minutes = Math.floor((secs - (hours * 3600)) / 60),
+        seconds = secs - (hours * 3600) - (minutes * 60);
+    hours >= 10 ? hours : hours = "0" + hours;
+    minutes >= 10 ? minutes : minutes = "0" + minutes;
+    seconds >= 10 ? seconds : seconds = "0" + seconds;
+    return hours + ":" + minutes + ":" + seconds; 
+};
+
+function showPomodoroTimer(element, time){
+    let timerElement = $("<h2></h2>").text(formatTimerDisplay(time));
+    element.empty();
+    element.append(timerElement);
+};
+
+function showCurrentTask(element, task){
+    element.empty();
+    element.append(showTask(task));
+}
 
 
 $(document).ready(function(){
     let newTaskBtn = $(".newTaskButton"),
         tasksList = $(".taskList"),
-        taskDiv = null,
+        startTimerBtn = $(".pomodoroStart"),
+        stopTimerBtn = $(".pomodoroStop"),
+        pauseTimerBtn = $(".pomodoroPause"),
+        pomodoro = $(".pomodoro"),
+        currentTaskDiv = $(".currentTask"),
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
+        taskDiv = null,
         editMode = false,
-        addMode = false;
+        addMode = false,
+        timerStarted = false;
     
 
     chrome.runtime.getBackgroundPage(function(page){
@@ -106,14 +132,12 @@ $(document).ready(function(){
             });
         });
     });
-  
 
     tasksList.on('dblclick', "ul", function(){
         if (!editMode && !addMode) {
             let taskId = this.id;
             taskDiv = $("#" + taskId);
             taskDiv.hide();
-     
             chrome.runtime.getBackgroundPage(function(page){
                 page.taskRepository.fetch(taskId, function(task){
                     editMode = true;
@@ -186,4 +210,57 @@ $(document).ready(function(){
             });
         });
     };
+
+    // Pomodoro Timer Events
+    function resetTimer(){
+        timerStarted = false;
+        pomodoro.empty();
+        currentTaskDiv.empty();
+    };
+
+    chrome.runtime.getBackgroundPage(function(page){
+        page.pomodoroTimer.loadTimer(function(response){
+            timerStarted = response.timerStarted;
+            showCurrentTask(currentTaskDiv, response.currentTask);
+        });
+    });
+
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+        if (request.command === "updateTime"){
+            showPomodoroTimer(pomodoro, request.time);    
+        }
+    });
+
+    startTimerBtn.click(function(){
+        chrome.runtime.getBackgroundPage(function(page){
+            let currentTask = $(".taskList ul").first()[0];
+            if (currentTask && !timerStarted){
+                page.taskRepository.fetch(currentTask.id, function(task){
+                    showCurrentTask(currentTaskDiv, task);
+                    page.pomodoroTimer.start(task, function(time){
+                        showPomodoroTimer(pomodoro, time);
+                        timerStarted = true;
+                    });
+                });               
+            }   
+        });
+    });
+
+    stopTimerBtn.click(function(){
+        if (timerStarted){
+            chrome.runtime.getBackgroundPage(function(page){
+                page.pomodoroTimer.stop(function(){
+                    resetTimer();
+                });
+            });
+        }    
+    })
+
+    pauseTimerBtn.click(function(){
+        if (timerStarted){
+            chrome.runtime.getBackgroundPage(function(page){
+                page.pomodoroTimer.pause(function(){});
+            });
+        }
+    });
 });

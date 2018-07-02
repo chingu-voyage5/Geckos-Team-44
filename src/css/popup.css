@@ -117,3 +117,20 @@ button:hover a {
 	border: 1px solid rgba(0, 0, 0, 0.2);
 	background-color: blue;
 }
+
+.deleteButton {
+	background: #e74c3c;
+	height: 10px;
+	margin-right: 20px;
+	text-align: center;
+	color: white;
+	width: 0;
+	display: inline-block;
+	transition: 0.25s linear;
+	opacity: 0;
+}
+
+.deleteButton:hover {
+	width: 10px;
+	opacity: 1.0;
+}

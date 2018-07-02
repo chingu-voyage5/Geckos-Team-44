@@ -72,6 +72,8 @@ function showTask(task){
         taskIcon = $("<i></i>", {class: "fas"}),
         taskName = $("<li></li>", {class: "taskName"}),
         taskBlocks = $("<li></li>", {class: "taskBlocks"});
+        //delete task
+        //deleteTask = $("<i></i>", {class: "fas, fa-trash-alt, deleteButton"});
     
     if (task.mode === "work") 
         taskIcon.addClass("fa-briefcase");
@@ -81,6 +83,8 @@ function showTask(task){
     taskName.text(task.title);
     taskBlocks.text(task.timeBlocks);
     taskMode.append(taskIcon);
+    //delete task
+    //deleteTask.append(deleteTask);
     taskDiv.append([taskMode, taskName, taskBlocks]);
 
     return taskDiv;
@@ -106,7 +110,7 @@ function showPomodoroTimer(element, time){
 function showCurrentTask(element, task){
     element.empty();
     element.append(showTask(task));
-}
+};
 
 
 $(document).ready(function(){

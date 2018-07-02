@@ -42,7 +42,7 @@ tasksList.on('dblclick', "ul", function(){
 
         deleteButton.click( function(){
             if (taskId === currentTaskId) {
-                showErrors();
+                editTaskForm.showErrors(["Cannot delete current task"]);
                 return;
             }
             chrome.runtime.getBackgroundPage(function(page){
@@ -166,6 +166,7 @@ tasksList.on('dblclick', "ul", function(){
             chrome.runtime.getBackgroundPage(function(page){
                 page.pomodoroTimer.stop(function(){
                     resetTimer();
+                    currentTaskId = null;
                 });
             });
         }    

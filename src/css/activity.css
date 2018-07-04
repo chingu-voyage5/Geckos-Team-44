@@ -1,0 +1,67 @@
+body {
+  background-color: #FFFCF7;
+  color: #393e46;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	color: #EA4D4D;
+}
+
+a:hover {
+	color: #D14545;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  grid-row-gap: 5em;
+}
+
+.tasks {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+h2 {
+  font-family: 'Maven Pro', sans-serif;
+  color: #222831;
+  text-align: center;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+li .selected {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.wrapper ul {
+	list-style-type: none;
+	-webkit-padding-start: 0px;
+}
+
+.wrapper ul li {
+	display: inline;
+}
+
+.newTaskButton {
+  text-align: center;
+}
+
+.activityLog {
+  grid-column-start: 1;
+  grid-column-end: span 3;
+}
+
+.activityNav {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+}

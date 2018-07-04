@@ -11,9 +11,10 @@ a:hover {
 }
 
 h3 {
-	grid-column-start: 2;
-	grid-column-end: 3;
+	grid-column-start: 1;
+	grid-column-end: 4;
 	font-family: 'Maven Pro', sans-serif;
+	
 }
 
 button {
@@ -37,9 +38,10 @@ button:hover a {
 
 .wrapper {
 	display: grid;
-	grid-template-columns: 100px 1fr 100px;
+	grid-template-columns: 100px 80px 100px;
 	justify-items: center;
-	width: 260px;
+	width: 280px;
+	min-height: 240px;
 }
 
 .settingsButton {
@@ -56,9 +58,18 @@ button:hover a {
 
 .taskList {
 	grid-column-start: 1;
-	grid-column-end: span 3;
+	grid-column-end: 4;
 	cursor: pointer;
 	user-select: none;
+	width: 100%;
+}
+
+.taskList ul, 
+.currentTask ul{
+	display: grid;
+	grid-template-columns: auto auto auto;
+	width: 100%;
+	justify-items: center;
 }
 
 .wrapper ul {
@@ -77,7 +88,8 @@ button:hover a {
 
 .currentTask {
 	grid-column-start: 1;
-	grid-column-end: span 3;
+	grid-column-end: 4;
+	width: 100%;
 }
 
 .pomodoro {
@@ -109,7 +121,12 @@ button:hover a {
 	font-family: 'Maven Pro', sans-serif;
 }
 
-.taskBlocks {
+.blocks {
+	display: grid;
+	grid-template-columns: auto auto;
+}
+
+.block {
 	float:right;
 	width: 7px;
 	height: 7px;

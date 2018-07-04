@@ -107,7 +107,7 @@ tasksList.on('dblclick', "ul", function(){
     addTaskForm.onSave = function(){
         let mode = $("#modeSelect").val(),
             title = $("#titleInput").val(),
-            timeBlocks = $("#timeBlocksInput").val();
+            timeBlocks = parseInt($("#timeBlocksInput").val());
 
         let request = {mode: mode, title: title, timeBlocks: timeBlocks};
     

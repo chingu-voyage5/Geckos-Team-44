@@ -1,6 +1,6 @@
 
 class PomodoroTimer{
-    constructor(timeBlockSize=15){
+    constructor(timeBlockSize=15*60){
         this.currentTask = null;
         this.interval = null;
         this.timeBlockSize = timeBlockSize;

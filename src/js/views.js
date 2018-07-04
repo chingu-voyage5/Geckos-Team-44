@@ -69,20 +69,22 @@ function showTask(task) {
     taskMode = $("<li></li>", { class: "taskIcon" }),
     taskIcon = $("<i></i>", { class: "fas" }),
     taskName = $("<li></li>", { class: "taskName" }),
-    taskBlocks = $("<li></li>", { class: "taskBlocks" });
-  //delete task
-  deleteTask = $("<i></i>", {class: "fas, fa-trash-alt, deleteButton"});
-
+    taskBlocks = $("<li></li>", { class: "taskBlocks" }),
+    blocks = $("<div></div>", {class: "blocks"});
+    
   if (task.mode === "work")
     taskIcon.addClass("fa-briefcase");
   else if (task.mode === "play")
     taskIcon.addClass("fa-paper-plane");
+  
+  for (var i=0; i < task.timeBlocks; i++){
+    let block = $("<div></div>", {class: "block"});
+    blocks.append([block]);
+  }
 
   taskName.text(task.title);
-  taskBlocks.text(task.timeBlocks);
   taskMode.append(taskIcon);
-  //delete task
-  deleteTask.append(deleteTask);
+  taskBlocks.append(blocks);
   taskDiv.append([taskMode, taskName, taskBlocks]);
 
   return taskDiv;

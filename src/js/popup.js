@@ -141,7 +141,7 @@ tasksList.on('dblclick', "ul", function(){
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         if (request.command === "updateTime"){
-            showPomodoroTimer(pomodoro, request.time);    
+            showPomodoroTimer(pomodoro, request.time);   
         }
     });
 

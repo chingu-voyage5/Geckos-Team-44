@@ -18,7 +18,7 @@ $(document).ready(function(){
     chrome.runtime.getBackgroundPage(function(page){
         page.taskService.listTasks(function(error, response){
             response.tasks.forEach(function(task){
-                tasksList.prepend(showTask(task));
+                tasksList.append(showTask(task));
             });
         });
     });
@@ -142,21 +142,24 @@ tasksList.on('dblclick', "ul", function(){
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         if (request.command === "updateTime"){
             showPomodoroTimer(pomodoro, request.time);   
+            showCurrentTask(currentTaskDiv, request.task);
+        } else if (request.command === "taskComplete"){
+            let completedTask = $("#" + request.task.id);
+            completedTask.remove();
+        } else if (request.command === "allTasksComplete"){
+            resetTimer();
+            currentTaskId = null;            
         }
     });
 
     startTimerBtn.click(function(){
         chrome.runtime.getBackgroundPage(function(page){
-            let currentTask = $(".taskList ul").first()[0];
-                currentTaskId = currentTask.id;
-            if (currentTask && !timerStarted){
-                page.taskRepository.fetch(currentTask.id, function(task){
+            if (!timerStarted){
+                page.pomodoroTimer.start(function(time, task){
                     showCurrentTask(currentTaskDiv, task);
-                    page.pomodoroTimer.start(task, function(time){
-                        showPomodoroTimer(pomodoro, time);
-                        timerStarted = true;
-                    });
-                });               
+                    showPomodoroTimer(pomodoro, time);
+                    timerStarted = true;
+                });           
             }   
         });
     });

@@ -11,37 +11,67 @@ class PomodoroTimer{
         this.taskRepository = taskRepository
     }
 
-    start(currentTask, callback){
-    	this.currentTask = currentTask;
+    initializeTimer(currentTask){
+        this.currentTask = currentTask;
         this.time = this.timeBlockSize * this.currentTask.timeBlocks;
         this.timerStarted = true; 
-        callback(this.time);
-    	this.interval = setInterval(this.updateTime.bind(this), this.delay);
+        this.interval = setInterval(this.updateTime.bind(this), this.delay);
+    }
+
+    start(callback){
+        this.taskRepository.fetchNextIncomplete(function(error, result){
+            this.initializeTimer(result.task);
+            callback(this.time, result.task);
+        }.bind(this));
+    }
+
+    setTaskComplete(task, timeBlockSize=15.0){
+        task.totalTimeSpent = timeBlockSize * task.timeBlocks;
+        task.completedOn = new Date();
     }
 
     updateTime(){
         if (this.time > 0){
             this.time--;
-            chrome.runtime.sendMessage({command: "updateTime", time: this.time});
-        } else {
-            this.timerStarted = false;    
+            chrome.runtime.sendMessage({command: "updateTime", 
+            time: this.time, task: this.currentTask});
+        } else {  
             clearInterval(this.interval);
-            this.notify()
-            this.currentTask.setComplete()
-            this.taskRepository.save(this.currentTask);
-            chrome.runtime.sendMessage({command: "taskComplete", task: this.currentTask});
+            this.setTaskComplete(this.currentTask);
+            this.taskRepository.save(this.currentTask, function(error, result){});
+            console.log(this.currentTask);
+
+            this.taskRepository.fetchNextIncomplete(function(error, result){
+                this.notify(this.currentTask, result.task)
+                chrome.runtime.sendMessage({command: "taskComplete", task: this.currentTask});
+                if (result.task){
+                    this.initializeTimer(result.task);
+                    chrome.runtime.sendMessage({command: "updateTime", 
+                    time: this.time, task: this.currentTask});
+                } else {
+                    this.resetTimer();
+                    chrome.runtime.sendMessage({command: "allTasksComplete"})
+                }
+            }.bind(this)); 
         }  
     }
 
-    notify(){
-        alert(this.currentTask.title + " is complete");
+    notify(currentTask, nextTask){
+        let nextTaskOutput = "There are no more tasks today"
+        if (nextTask)
+            nextTaskOutput = "The next task is " + nextTask.title;
+        alert(currentTask.title + " is complete.\n" + nextTaskOutput );
     }
 
-    stop(callback){
+    resetTimer(){
         this.currentTask = null;
         this.time = null;
         this.timerStarted = false;
-        clearInterval(this.interval);
+        clearInterval(this.interval);     
+    }
+
+    stop(callback){
+        this.resetTimer();
         callback();
     }
 

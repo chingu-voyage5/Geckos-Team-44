@@ -1,6 +1,6 @@
 
 class PomodoroTimer{
-    constructor(timeBlockSize=3){
+    constructor(taskRepository, timeBlockSize=3){
         this.currentTask = null;
         this.interval = null;
         this.timeBlockSize = timeBlockSize;
@@ -8,6 +8,7 @@ class PomodoroTimer{
         this.paused = false;
         this.delay = 1000;
         this.time = null;
+        this.taskRepository = taskRepository
     }
 
     start(currentTask, callback){
@@ -25,17 +26,15 @@ class PomodoroTimer{
         } else {
             this.timerStarted = false;    
             clearInterval(this.interval);
-            let request = {command: "showNotification", task: this.currentTask};
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                chrome.tabs.sendMessage(tabs[0].id, request, function(response){
-                    if (response.command === "markTaskComplete"){
-                        alert("task completed");
-                    } else if (response.command === "markTaskIncomplete"){
-                        alert("task incomplete");
-                    }
-                });
-            });
+            this.notify()
+            this.currentTask.setComplete()
+            this.taskRepository.save(this.currentTask);
+            chrome.runtime.sendMessage({command: "taskComplete", task: this.currentTask});
         }  
+    }
+
+    notify(){
+        alert(this.currentTask.title + " is complete");
     }
 
     stop(callback){

@@ -18,15 +18,8 @@
 			"src/js/background.js"
 		]
 	},
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["src/js/content.js"]
-		}
-	],
 	"permissions": [
-		"storage", 
-		"activeTab"
+		"storage"
 	]
 
 }

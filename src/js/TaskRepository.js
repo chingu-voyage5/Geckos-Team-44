@@ -32,7 +32,20 @@ TaskRepository.prototype.fetchAll = function(callback){
 				taskRepository._tasks[task.id] = copiedTask;
 			}	
 		}
-		callback(null, {tasks: tasks});
+		let ordedTasks = tasks.sort(function(a, b){
+			return a.createdOn - b.createdOn;
+		});
+		callback(null, {tasks: ordedTasks});
+	});
+}
+
+TaskRepository.prototype.fetchNextIncomplete = function(callback){
+	this.fetchAll(function(error, result){
+		for (task of result.tasks){
+            if (task.completedOn === null)
+                return callback(null, {task: task})
+		}
+		return callback(null, {task: null})
 	});
 }
 

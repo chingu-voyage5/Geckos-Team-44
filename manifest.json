@@ -8,11 +8,18 @@
 	}, 
 	"background": {
 		"persistent": false,
-		"scripts": ["src/js/helpers.js", "spec/mocks.js",
-			"src/js/Task.js", "src/js/TaskRepository.js", 
-			"src/js/TaskService.js", "src/js/PomodoroTimer.js",
-			"src/js/background.js"]
+		"scripts": [
+			"src/js/helpers.js", 
+			"spec/mocks.js",
+			"src/js/Task.js", 
+			"src/js/TaskRepository.js", 
+			"src/js/TaskService.js", 
+			"src/js/PomodoroTimer.js",
+			"src/js/background.js"
+		]
 	},
-	"permissions": ["storage"]
+	"permissions": [
+		"storage"
+	]
 
 }

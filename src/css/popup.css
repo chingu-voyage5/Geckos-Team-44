@@ -135,19 +135,23 @@ button:hover a {
 	background-color: blue;
 }
 
-.deleteButton {
-	background: #e74c3c;
-	height: 10px;
-	margin-right: 20px;
-	text-align: center;
-	color: white;
-	width: 0;
-	display: inline-block;
-	transition: 0.25s linear;
-	opacity: 0;
+.taskList {
+	font-size: 15px;
 }
 
-.deleteButton:hover {
-	width: 10px;
-	opacity: 1.0;
+.taskForm button {
+	margin: 10px;
+}
+
+#modeSelect, #titleInput, #timeBlocksInput {
+	display: block;
+	margin: auto;
+	font-family: "Maven Pro";
+	border-color: blue;
+
+}
+
+#modeSelect {
+	height: 21px;
+	border-width: 2px;
 }

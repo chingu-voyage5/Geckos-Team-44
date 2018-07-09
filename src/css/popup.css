@@ -148,7 +148,8 @@ button:hover a {
 	margin: auto;
 	font-family: "Maven Pro";
 	border-color: blue;
-
+	border-radius: 20%;
+	font-size: 14px;
 }
 
 #modeSelect {

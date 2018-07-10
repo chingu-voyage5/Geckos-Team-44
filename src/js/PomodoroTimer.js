@@ -8,7 +8,7 @@ class PomodoroTimer{
         this.paused = false;
         this.delay = 1000;
         this.time = null;
-        this.taskRepository = taskRepository
+        this.taskRepository = taskRepository;
     }
 
     initializeTimer(currentTask){

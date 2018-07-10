@@ -49,6 +49,18 @@ TaskRepository.prototype.fetchNextIncomplete = function(callback){
 	});
 }
 
+TaskRepository.prototype.fetchAllComplete = function(callback){
+	this.fetchAll(function(error, result){
+		let completedTasks = [];
+		for (task of result.tasks){
+            if (task.completedOn !== null)
+                completedTasks.push(task);
+		}
+		return callback(null, {tasks: completedTasks});
+	});	
+}
+
+
 TaskRepository.prototype.fetch = function(taskId, callback){
 	let unserializeTask = this.unserializeTask;
 	let task = this._tasks[taskId];

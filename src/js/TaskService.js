@@ -80,6 +80,11 @@ TaskService.prototype.deleteTask = function(request, callback){
     });
 };
 
+TaskService.prototype.getCompletedTasksFor = function(timePeriodString, callback){
+    let timePeriodkey = {daily: 1, weekly: 7, monthly: 30};
+    let timePeriod = timePeriodKey[timePeriodString];
+}
+
 TaskService.prototype.editTask = function(request, callback){
     var taskRepository = this.taskRepository;
     var taskService = this;

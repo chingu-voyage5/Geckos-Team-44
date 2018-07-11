@@ -6,6 +6,7 @@ $(document).ready(function(){
         pauseTimerBtn = $(".pomodoroPause"),
         pomodoro = $(".pomodoro"),
         currentTaskDiv = $(".currentTask"),
+        settingsButton = $("#settingsButton"),
         currentTaskId = null;
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
@@ -181,5 +182,9 @@ tasksList.on('dblclick', "ul", function(){
                 page.pomodoroTimer.pause(function(){});
             });
         }
+    });
+
+    settingsButton.click(function(){
+        window.open(chrome.runtime.getURL("views/settings.html"));
     });
 });

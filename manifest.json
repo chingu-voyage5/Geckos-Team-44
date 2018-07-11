@@ -11,7 +11,9 @@
 		"scripts": [
 			"src/js/helpers.js", 
 			"spec/mocks.js",
-			"src/js/Task.js", 
+			"src/js/Task.js",
+			"src/js/SettingsRepository.js",
+			"src/js/SettingsService.js", 
 			"src/js/TaskRepository.js", 
 			"src/js/TaskService.js", 
 			"src/js/PomodoroTimer.js",

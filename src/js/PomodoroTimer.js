@@ -1,19 +1,19 @@
 
 class PomodoroTimer{
-    constructor(taskRepository, timeBlockSize=3){
+    constructor(taskRepository, settings){
         this.currentTask = null;
         this.interval = null;
-        this.timeBlockSize = timeBlockSize;
         this.timerStarted = false;
         this.paused = false;
         this.delay = 1000;
         this.time = null;
         this.taskRepository = taskRepository;
+        this.settings = settings;
     }
 
     initializeTimer(currentTask){
         this.currentTask = currentTask;
-        this.time = this.timeBlockSize * this.currentTask.timeBlocks;
+        this.time = (this.settings.timeBlockSize * this.currentTask.timeBlocks);
         this.timerStarted = true; 
         this.interval = setInterval(this.updateTime.bind(this), this.delay);
     }
@@ -25,9 +25,10 @@ class PomodoroTimer{
         }.bind(this));
     }
 
-    setTaskComplete(task, timeBlockSize=15.0){
+    setTaskComplete(task, timeBlockSize){
         task.totalTimeSpent = timeBlockSize * task.timeBlocks;
         task.completedOn = new Date();
+        console.log(task);
     }
 
     updateTime(){
@@ -37,10 +38,8 @@ class PomodoroTimer{
             time: this.time, task: this.currentTask});
         } else {  
             clearInterval(this.interval);
-            this.setTaskComplete(this.currentTask);
+            this.setTaskComplete(this.currentTask, this.settings.timeBlockSize);
             this.taskRepository.save(this.currentTask, function(error, result){});
-            console.log(this.currentTask);
-
             this.taskRepository.fetchNextIncomplete(function(error, result){
                 this.notify(this.currentTask, result.task)
                 chrome.runtime.sendMessage({command: "taskComplete", task: this.currentTask});

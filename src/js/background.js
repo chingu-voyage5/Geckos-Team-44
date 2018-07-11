@@ -7,7 +7,7 @@ settings.loadUserSettings();
 
 var taskRepository = new TaskRepository(chrome);
 var taskService = new TaskService(taskRepository);
-var pomodoroTimer = new PomodoroTimer(taskRepository);
+var pomodoroTimer = new PomodoroTimer(taskRepository, settings);
 
 // Test Fixtures
 taskService.addTask({title: "Add Notifications", mode: "work", timeBlocks: 1}, function(error, result){});

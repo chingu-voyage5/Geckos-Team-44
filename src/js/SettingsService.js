@@ -1,7 +1,7 @@
 
 function SettingsService(settingsRepository){
     this.settingsRepository = settingsRepository;
-    this.timeBlockSize = 15;
+    this.timeBlockSize = 3;
 }
 
 SettingsService.prototype.loadUserSettings = function(){

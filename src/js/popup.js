@@ -13,7 +13,11 @@ $(document).ready(function(){
         editMode = false,
         addMode = false,
         timerStarted = false;
-        
+
+    $('.activityButton').on('click', 'a', function () {
+        chrome.tabs.create({ url: $(this).attr('href') });
+        return false;
+    });
 
     chrome.runtime.getBackgroundPage(function(page){
         page.taskService.listTasks(function(error, response){

@@ -21,7 +21,7 @@ Task.prototype.isCompleted = function() {
 	return true;
 };
 
-Task.prototype.setComplete = function(timeBlockSize=15.0) {
+Task.prototype.setComplete = function(timeBlockSize) {
 	this.totalTimeSpent = timeBlockSize * this.timeBlocks;
 	this.completedOn = new Date();
 }

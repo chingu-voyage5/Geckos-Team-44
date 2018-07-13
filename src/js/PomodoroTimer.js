@@ -25,12 +25,6 @@ class PomodoroTimer{
         }.bind(this));
     }
 
-    setTaskComplete(task, timeBlockSize){
-        task.totalTimeSpent = timeBlockSize * task.timeBlocks;
-        task.completedOn = new Date();
-        console.log(task);
-    }
-
     updateTime(){
         if (this.time > 0){
             this.time--;
@@ -38,7 +32,7 @@ class PomodoroTimer{
             time: this.time, task: this.currentTask});
         } else {  
             clearInterval(this.interval);
-            this.setTaskComplete(this.currentTask, this.settings.timeBlockSize);
+            this.currentTask.setComplete(this.settings.timeBlockSize);
             this.taskRepository.save(this.currentTask, function(error, result){});
             this.taskRepository.fetchNextIncomplete(function(error, result){
                 this.notify(this.currentTask, result.task)

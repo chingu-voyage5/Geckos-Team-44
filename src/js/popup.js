@@ -7,6 +7,7 @@ $(document).ready(function(){
         pomodoro = $(".pomodoro"),
         currentTaskDiv = $(".currentTask"),
         settingsButton = $("#settingsButton"),
+        wrapper = $(".wrapper"),
         currentTaskId = null;
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
@@ -150,7 +151,10 @@ tasksList.on('dblclick', "ul", function(){
             showCurrentTask(currentTaskDiv, request.task);
         } else if (request.command === "taskComplete"){
             let completedTask = $("#" + request.task.id);
-            completedTask.remove();
+            completedTask.fadeOut(1000, function(){
+                completedTask.remove();
+            });
+            showCurrentTask(currentTaskDiv, request.task);
         } else if (request.command === "allTasksComplete"){
             resetTimer();
             currentTaskId = null;            

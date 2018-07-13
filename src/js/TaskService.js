@@ -59,7 +59,7 @@ TaskService.prototype.listTasks = function(callback){
     this.taskRepository.fetchAll(function(error, result){
         let tasks = [];
         for (task of result.tasks){
-            if (task.completedOn === null)
+            if (!task.isCompleted())
                 tasks.push(task);
         }
         callback(error, {tasks: tasks});
@@ -73,7 +73,6 @@ TaskService.prototype.deleteTask = function(request, callback){
     taskRepository.fetch(request.id, function(task){
         if (!task)
             return taskService.handleTaskNotFound(task, callback);
-
         taskRepository.delete(task.id, function(taskId){
             callback(null, {taskId: taskId});
         });

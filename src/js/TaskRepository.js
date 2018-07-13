@@ -5,6 +5,14 @@ function TaskRepository(chrome){
 	this._tasks = {};
 };
 
+TaskRepository.prototype.load = function(){
+	this._chrome.storage.sync.get("tasks", function(result){
+		for (taskId in result.tasks)
+			this._tasks[taskId] = Object.assign(new Task(), 
+			this.unserializeTask(result.tasks[taskId])); 
+	}.bind(this));
+};
+
 TaskRepository.prototype.save = function(task, callback){
 	if (task.id === null)
 		task.id = uuid();
@@ -15,34 +23,25 @@ TaskRepository.prototype.save = function(task, callback){
 	let copiedTask = Object.assign(new Task(), task);
 	this._tasks[task.id] = copiedTask;
 
-	this._chrome.storage.sync.set({[task.id]: this.serializeTask(copiedTask)}, function(){
+	this._chrome.storage.sync.set({tasks: this.serializeTasks(this._tasks)}, function(){
 		callback(null, task);
 	});
 };
 
 TaskRepository.prototype.fetchAll = function(callback){
-	let taskRepository = this;
-	this._chrome.storage.sync.get(null, function(result){
-		let tasks = [];
-		for (key in result){
-			let task = result[key];
-			if (task.hasOwnProperty("name") && task.name == "Task"){
-				tasks.push(taskRepository.unserializeTask(task));
-				let copiedTask = Object.assign(new Task(), task);
-				taskRepository._tasks[task.id] = copiedTask;
-			}	
-		}
-		let ordedTasks = tasks.sort(function(a, b){
-			return a.createdOn - b.createdOn;
-		});
-		callback(null, {tasks: ordedTasks});
+	let tasks = [];
+	for (taskId in this._tasks)
+		tasks.push(this._tasks[taskId]);
+	let orderedTasks = tasks.sort(function(a, b){
+		return a.createdOn - b.createdOn;
 	});
+	return callback(null, {tasks: orderedTasks});
 }
 
 TaskRepository.prototype.fetchNextIncomplete = function(callback){
 	this.fetchAll(function(error, result){
 		for (task of result.tasks){
-            if (task.completedOn === null)
+            if (!task.isCompleted())
                 return callback(null, {task: task})
 		}
 		return callback(null, {task: null})
@@ -53,7 +52,7 @@ TaskRepository.prototype.fetchAllComplete = function(callback){
 	this.fetchAll(function(error, result){
 		let completedTasks = [];
 		for (task of result.tasks){
-            if (task.completedOn !== null)
+            if (task.isCompleted())
                 completedTasks.push(task);
 		}
 		return callback(null, {tasks: completedTasks});
@@ -62,23 +61,24 @@ TaskRepository.prototype.fetchAllComplete = function(callback){
 
 
 TaskRepository.prototype.fetch = function(taskId, callback){
-	let unserializeTask = this.unserializeTask;
 	let task = this._tasks[taskId];
 	if (task)
-		return callback(unserializeTask(task));
-	this._chrome.storage.sync.get([taskId], function(result){
-		task = result[taskId];
-		if (task)
-			callback(unserializeTask(task));
-		else
-			callback(null);
-	});
+		return callback(task);
+	return callback(null);
 };
 
 TaskRepository.prototype.delete = function(taskId, callback){
-	this._chrome.storage.sync.remove([taskId]);
 	delete this._tasks[taskId];
-	callback(taskId);
+	this._chrome.storage.sync.set({tasks: this._tasks}, function(){
+		callback(taskId);
+	});
+};
+
+TaskRepository.prototype.serializeTasks = function(tasks){
+	for (taskId in tasks){
+		this.serializeTask(tasks[taskId]);
+	}
+	return tasks;
 };
 
 TaskRepository.prototype.serializeTask = function(task){

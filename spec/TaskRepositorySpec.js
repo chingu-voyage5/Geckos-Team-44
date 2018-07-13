@@ -60,34 +60,6 @@ describe("TaskRepository", function(){
 		});
 	});
 
-	describe("fetchAll", function(){
-		it("should call storage get function with null", function(){
-			this.taskRepository.fetchAll(function(){});
-			expect(this.chrome.storage.sync.get).toHaveBeenCalled();
-			expect(this.chrome.storage.sync.get).toHaveBeenCalledWith(
-				null, jasmine.any(Function));
-		})
-
-		it("should store tasks in-memory", function(){
-			let task = new Task();
-			task.id = "1";
-			this.getSpy.and.callFake(function(keys, callback){
-				callback({[task.id]: task});});
-			this.taskRepository.fetchAll(function(){});
-			expect(this.taskRepository._tasks).toEqual({[task.id]: task})
-		});
-	});
-
-	describe("delete", function(){
-		it("should remove task from in-memory", function(){
-			let task = new Task();
-			task.id = "1";
-			this.taskRepository._tasks[task.id] = task;
-			this.taskRepository.delete(task.id, function(){});
-			expect(this.taskRepository._tasks).toEqual({});
-		});
-	})
-
 	describe("fetch", function(){
 		it("should return in-memory object if found", function(){
 			let task = new Task();

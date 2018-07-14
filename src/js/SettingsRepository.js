@@ -14,3 +14,7 @@ SettingsRepository.prototype.saveUserSettings = function(settings, callback){
         callback(null, settings);
     }); 
 }
+
+SettingsRepository.prototype.resetAll = function(){
+    this._chrome.storage.sync.remove("settings");
+}

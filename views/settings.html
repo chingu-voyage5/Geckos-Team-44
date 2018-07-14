@@ -11,15 +11,18 @@
     
 </head>
 <body>
-    <div class="wrapper">
-        <div class="settingsMain">
-            <h1>Settings</h1>
-            <div id="settingsMessages"></div>
-            <label for="timeBlockSize">Time Block Size:</label>
-            <input id="timeBlockSize" type="number" max="60" min="1">
-            <br><br>
-            <button id="saveSettingsButton">Save</button>
-        </div>
-    </div>
+    <h1>Settings</h1>
+    <div id="settingsMessages"></div>
+    <p>
+        <label for="timeBlockSize">Time Block Size:</label>
+        <input id="timeBlockSize" type="number" max="60" min="1"> mins
+    </p>
+    <p>
+        <label for="displayTaskNotification">Display Task Notification:</label>
+        <input type="checkbox" id="displayTaskNotification" checked>
+        
+    </p>
+    <button id="saveSettingsButton">Save</button>
+    <button id="resetSettingsButton">Reset</button>
 </body>
 </html>

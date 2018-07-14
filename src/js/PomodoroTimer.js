@@ -35,7 +35,8 @@ class PomodoroTimer{
             this.currentTask.setComplete(this.settings.timeBlockSize);
             this.taskRepository.save(this.currentTask, function(error, result){});
             this.taskRepository.fetchNextIncomplete(function(error, result){
-                this.notify(this.currentTask, result.task)
+                if (this.settings.displayTaskNotification)
+                    this.notify(this.currentTask, result.task)
                 chrome.runtime.sendMessage({command: "taskComplete", task: this.currentTask});
                 if (result.task){
                     this.initializeTimer(result.task);

@@ -5,39 +5,32 @@
         <link rel="stylesheet" href="../src/css/activity.css">
         <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Maven+Pro" rel="stylesheet">
         <script src="../lib/jquery-3.3.1.js"></script>
+        <script src="../src/js/activity.js"></script></script>
     </head>
     <body>
       <div class="wrapper">
         <div class="tasks">
-          <h2>Tasks</h2>
-          <div class="taskList">
-            <ul>
-                <li class="taskIcon">
-                    <i class="fas fa-paper-plane"></i>
-                </li>
-                <li class="taskName">Watch youtube videos</li>
-                <li class="taskBlocks"></li>
-            </ul>
-            <ul>
-              <li class="taskIcon">
-                <i class="fas fa-briefcase"></i>
-              </li>
-              <li class="taskName completed">Debug JavaScript</li>
-              <li class="taskBlocks"></li>
-            </ul>
-          </div>
-          <div class="newTaskButton">
-                  <button><i class="fas fa-plus"></i> Add New Task</button>
-  		    </div>
-        </div>
+          <h2>Activity Log</h2>
         <div class="activityLog">
           <div class="activityNav">
             <ul>
-              <li><a class="selected" href="#">DAY</a></li>
-              <li><a href="#">WEEK</a></li>
-              <li><a href="#">MONTH</a></li>
+              <li><span class="selected" id="allTasksButton">All</span></li>
+              <li><span id="dailyTasksButton">Daily</span></li>
+              <li><span id="weeklyTasksButton">Weekly</span></li>
+              <li><span id="monthlyTasksButton">Monthly</span></li>
             </ul>
           </div>
+            <table id="completedTasksTable">
+              <thead>
+                  <tr>
+                      <th>Work/Play</th>
+                      <th>Title</th>
+                      <th>Completed Date</th>
+                      <th>Total time spent</th>
+                    </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
         </div>
       </div>
     </body>

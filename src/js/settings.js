@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    let timeBlockSize = $("#timeBlockSize"),
+    let timeBlockSize = $("#timeBlockSizeSetting"),
         displayTaskNotification = $("#displayTaskNotification"),
         saveSettingsButton = $("#saveSettingsButton"),
         resetSettingsButton = $("#resetSettingsButton"),
@@ -14,14 +14,11 @@ $(document).ready(function(){
         updateSettings(page.settings);
     });
 
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-        if (request.command === "updateSettings")
-            updateSettings(request.settings);
-    });
-
     resetSettingsButton.click(function(){
         chrome.runtime.getBackgroundPage(function(page){
-            page.settings.resetAll();
+            page.settings.resetAll(function(request){
+                updateSettings(request);
+            });
         });
     });
 

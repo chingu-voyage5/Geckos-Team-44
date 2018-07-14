@@ -80,8 +80,26 @@ TaskService.prototype.deleteTask = function(request, callback){
 };
 
 TaskService.prototype.getCompletedTasksFor = function(timePeriodString, callback){
-    let timePeriodkey = {daily: 1, weekly: 7, monthly: 30};
+    let timePeriodKey = {daily: 1, weekly: 7, monthly: 30};
     let timePeriod = timePeriodKey[timePeriodString];
+
+    function filterTasksWithinTimePeriod(tasks){
+        let dailyTasks = [];
+        for (task of tasks) {
+            let timeDiff = Math.abs(task.completedOn.getTime() - new Date().getTime());
+            let diffDays = timeDiff / (1000 * 3600 * 24);
+            if (diffDays <= timePeriod) {
+                dailyTasks.push(task);
+            }
+        }
+        return dailyTasks;
+    };
+
+    this.taskRepository.fetchAllComplete(function(error, request){
+        if (!timePeriod)
+            return callback(request.tasks);
+        return callback(filterTasksWithinTimePeriod(request.tasks));
+    });
 }
 
 TaskService.prototype.editTask = function(request, callback){

@@ -53,10 +53,10 @@ TaskRepository.prototype.fetchAllComplete = function(callback){
 		let completedTasks = [];
 		for (task of result.tasks){
             if (task.isCompleted())
-                completedTasks.push(task);
+                completedTasks.push(Object.assign(new Task(), this.unserializeTask(task)));
 		}
 		return callback(null, {tasks: completedTasks});
-	});	
+	}.bind(this));	
 }
 
 

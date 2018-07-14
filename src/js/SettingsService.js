@@ -3,6 +3,11 @@ function SettingsService(settingsRepository){
     this.settingsRepository = settingsRepository;
     this.timeBlockSize = 3;
     this.displayTaskNotification = true;
+    
+    this.defaultSettings = {
+        timeBlockSize: 3,
+        displayTaskNotification: true
+    };
 }
 
 SettingsService.prototype.loadUserSettings = function(){
@@ -19,13 +24,8 @@ SettingsService.prototype.addUserSettings = function(settings, callback){
     }.bind(this));
 }
 
-SettingsService.prototype.resetAll = function(){
-    this.settingsRepository.resetAll();
-    chrome.runtime.sendMessage(
-        {
-            command: "updateSettings", settings: {
-            timeBlockSize: this.timeBlockSize,
-            displayTaskNotification: this.displayTaskNotification
-        }
-    });
+SettingsService.prototype.resetAll = function(callback){
+    this.settingsRepository.resetAll(function(){
+        callback(this.defaultSettings);
+    }.bind(this));
 }

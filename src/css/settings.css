@@ -1,4 +1,37 @@
 body {
-    font-family: sans-serif;
-    color: #444;
+  background-color: #FFFCF7;
+  color: #393e46;
+}
+
+h1 {
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+label {
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  grid-row-gap: 5em;
+}
+
+.settingsMain {
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+.settingsMessages {
+    font-family: 'Maven Pro', sans-serif;
+}
+
+#saveSettingsButton {
+    font-family: 'Maven Pro', sans-serif;
+    margin-left: 55px;
+    margin-right: 55px;
 }

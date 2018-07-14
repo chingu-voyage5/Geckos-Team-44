@@ -5,15 +5,21 @@
     <title>WorkPlay Pomodoro - Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../src/css/settings.css">
+    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Maven+Pro" rel="stylesheet">
     <script src="../lib/jquery-3.3.1.js"></script>
     <script src="../src/js/settings.js"></script>
+    
 </head>
 <body>
-    <h1>Settings</h1>
-    <div id="settingsMessages"></div>
-    <label for="timeBlockSize">Time Block Size:</label>
-    <input id="timeBlockSize" type="number" max="60" min="1">
-    <br><br>
-    <button id="saveSettingsButton">Save</button>
+    <div class="wrapper">
+        <div class="settingsMain">
+            <h1>Settings</h1>
+            <div id="settingsMessages"></div>
+            <label for="timeBlockSize">Time Block Size:</label>
+            <input id="timeBlockSize" type="number" max="60" min="1">
+            <br><br>
+            <button id="saveSettingsButton">Save</button>
+        </div>
+    </div>
 </body>
 </html>

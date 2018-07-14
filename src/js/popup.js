@@ -7,7 +7,6 @@ $(document).ready(function(){
         pomodoro = $(".pomodoro"),
         currentTaskDiv = $(".currentTask"),
         settingsButton = $("#settingsButton"),
-        wrapper = $(".wrapper"),
         currentTaskId = null;
         addTaskForm = new TaskFormView(),
         editTaskForm = new TaskFormView(),
@@ -20,6 +19,15 @@ $(document).ready(function(){
         chrome.tabs.create({ url: $(this).attr('href') });
         return false;
     });
+
+    function resizePopUpHeight(removedDivs){
+        let totalHeightToBeRemoved = 0.0;
+        for (div of removedDivs)
+            totalHeightToBeRemoved += div.height(); 
+        let newHeight = ($(".wrapper").height() - totalHeightToBeRemoved);
+        $("body").height(newHeight);
+        $("html").height(newHeight);
+    }
 
     chrome.runtime.getBackgroundPage(function(page){
         page.taskService.listTasks(function(error, response){
@@ -54,7 +62,8 @@ tasksList.on('dblclick', "ul", function(){
             chrome.runtime.getBackgroundPage(function(page){
                 page.taskService.deleteTask({id: taskId}, function(error, response){
                     if (!error){
-                        let task = $("#" + taskId); 
+                        let task = $("#" + taskId);
+                        resizePopUpHeight([task, $(".taskForm")]); 
                         task.remove();
                         editTaskForm.resetForm();
                         editMode = false;
@@ -65,10 +74,10 @@ tasksList.on('dblclick', "ul", function(){
     });
 
     // Edit Task Events
-
     editTaskForm.onCancel = function(){
         this.resetForm();
         taskDiv.show();
+        resizePopUpHeight([$(".taskForm")]); 
         editMode = false;
     };
 
@@ -107,6 +116,7 @@ tasksList.on('dblclick', "ul", function(){
     addTaskForm.onCancel = function(){
         newTaskBtn.show();
         addTaskForm.resetForm();
+        resizePopUpHeight([$(".taskForm")]); 
         addMode = false;
     };
 
@@ -125,6 +135,7 @@ tasksList.on('dblclick', "ul", function(){
                     tasksList.append(showTask(response.task));
                     newTaskBtn.show();
                     addTaskForm.resetForm();
+                    resizePopUpHeight([$(".taskForm")]); 
                     addMode = false;
                 }   
             });
@@ -151,13 +162,15 @@ tasksList.on('dblclick', "ul", function(){
             showCurrentTask(currentTaskDiv, request.task);
         } else if (request.command === "taskComplete"){
             let completedTask = $("#" + request.task.id);
-            completedTask.fadeOut(1000, function(){
+            completedTask.fadeOut(500, function(){
                 completedTask.remove();
+                resizePopUpHeight([completedTask]); 
             });
             showCurrentTask(currentTaskDiv, request.task);
         } else if (request.command === "allTasksComplete"){
             resetTimer();
-            currentTaskId = null;            
+            resizePopUpHeight([currentTaskDiv, pomodoro]);    
+            currentTaskId = null;     
         }
     });
 
@@ -178,6 +191,7 @@ tasksList.on('dblclick', "ul", function(){
             chrome.runtime.getBackgroundPage(function(page){
                 page.pomodoroTimer.stop(function(){
                     resetTimer();
+                    resizePopUpHeight([currentTaskDiv, pomodoro]);
                     currentTaskId = null;
                 });
             });

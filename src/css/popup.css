@@ -39,9 +39,8 @@ button:hover a {
 .wrapper {
 	display: grid;
 	grid-template-columns: 100px 80px 100px;
+	margin-bottom: 10px;
 	justify-items: center;
-	width: 280px;
-	min-height: 240px;
 }
 
 .settingsButton {

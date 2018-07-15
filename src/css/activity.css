@@ -3,21 +3,47 @@ body {
   color: #393e46;
 }
 
-a {
-	text-decoration: none;
+li:hover {
+  color: #D14545;
+  cursor: pointer;
 }
 
-a:link, a:visited {
-	color: #EA4D4D;
+h2 {
+  font-family: 'Maven Pro', sans-serif;
+  color: #222831;
+  text-align: center;
 }
 
-a:hover {
-	color: #D14545;
+table {
+  border: 1px solid #ddd;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2d4a88c;
+}
+
+th {
+  padding: 12px;
+  text-align: left;
+  background-color: #f2d4a8;
+}
+
+td {
+  text-align: center;
+  padding: 5px;
+}
+
+tr:hover {
+  background-color: #f2d4a8;
+}
+
+tr:nth-child(even):hover {
+  background-color: #f2d4a8;
 }
 
 .wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   justify-items: center;
   grid-row-gap: 5em;
 }
@@ -25,12 +51,6 @@ a:hover {
 .tasks {
   grid-column-start: 2;
   grid-column-end: 3;
-}
-
-h2 {
-  font-family: 'Maven Pro', sans-serif;
-  color: #222831;
-  text-align: center;
 }
 
 .completed {
@@ -64,4 +84,8 @@ li .selected {
   font-family: 'Maven Pro', sans-serif;
   font-size: 20px;
   letter-spacing: 1px;
+}
+
+#completedTasksTable {
+  width: 100%;
 }

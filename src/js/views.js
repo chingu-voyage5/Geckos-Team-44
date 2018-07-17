@@ -2,7 +2,7 @@ class TaskFormView {
   constructor(taskDiv = null) {
     this.taskDiv = taskDiv;
     this.taskFormDiv = $("<div></div>", { class: "taskForm" });
-    this.saveBtn = $("<button>Save</button>");
+    this.saveBtn = $("<button class='saveButton'>Save</button>");
     this.cancelBtn = $("<button>Cancel</button>");
     this.errorsList = $("<div></div>", { id: "errorsList" }).css({ color: "red" });
     this.onCancel = function () { };

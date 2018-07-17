@@ -83,7 +83,6 @@ li .selected {
 .activityNav {
   font-family: 'Maven Pro', sans-serif;
   font-size: 20px;
-  letter-spacing: 1px;
 }
 
 #completedTasksTable {

@@ -2,6 +2,16 @@ a {
 	text-decoration: none;
 }
 
+body {
+	width: 300px;
+	margin: 0 auto;
+}
+
+html {
+	width: 300px;
+	padding: 0 10px;
+}
+
 a:link, a:visited {
 	color: blue;
 }
@@ -21,9 +31,10 @@ button {
 	font-family: 'Maven Pro', sans-serif;
 	padding: 12px;
 	background-color: white;
-	border-radius: 25%;
+	border-radius: 8px;
 	border: 2px solid blue;
-	font-size: 20px;
+	font-size: 15px;
+	outline: none;
 }
 
 button:hover {
@@ -38,8 +49,8 @@ button:hover a {
 
 .wrapper {
 	display: grid;
-	grid-template-columns: 100px 80px 100px;
-	margin-bottom: 10px;
+	grid-template-columns: 30% 40% 30%;
+	margin: 10px 0;
 	justify-items: center;
 }
 
@@ -66,7 +77,7 @@ button:hover a {
 .taskList ul, 
 .currentTask ul{
 	display: grid;
-	grid-template-columns: auto auto auto;
+	grid-template-columns: 25% 50% 25%;
 	width: 100%;
 	justify-items: center;
 }
@@ -135,23 +146,30 @@ button:hover a {
 }
 
 .taskList {
-	font-size: 15px;
+	grid-template-columns: 1fr 150px 1fr;
+	font-size: 14px;
+	align-items: auto;
 }
 
-.taskForm button {
-	margin: 10px;
+.saveButton {
+	margin-left: 75px;
+	margin-right: 10px;
 }
 
 #modeSelect, #titleInput, #timeBlocksInput {
 	display: block;
-	margin: auto;
 	font-family: "Maven Pro";
 	border-color: blue;
-	border-radius: 20%;
 	font-size: 14px;
+	padding: 5px 5px;
+	width: 100%;
+	border-radius: 8px;
+	outline: none;
 }
 
 #modeSelect {
-	height: 21px;
 	border-width: 2px;
+	width: 68px;
+	padding: 4px 4px;
 }
+

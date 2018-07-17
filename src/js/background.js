@@ -1,10 +1,11 @@
 
+// chrome.storage.sync.clear();
+
 chrome.storage.sync.clear();
 
 var settingsRepository = new SettingsRepository(chrome);
 var settings = new SettingsService(settingsRepository);
 settings.loadUserSettings();
-
 var taskRepository = new TaskRepository(chrome);
 taskRepository.load();
 var taskService = new TaskService(taskRepository);

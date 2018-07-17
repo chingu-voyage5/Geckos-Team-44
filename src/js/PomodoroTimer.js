@@ -13,7 +13,7 @@ class PomodoroTimer{
 
     initializeTimer(currentTask){
         this.currentTask = currentTask;
-        this.time = (this.settings.timeBlockSize * this.currentTask.timeBlocks);
+        this.time = (this.settings.timeBlockSize * this.currentTask.timeBlocks) * 60;
         this.timerStarted = true; 
         this.interval = setInterval(this.updateTime.bind(this), this.delay);
     }

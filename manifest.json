@@ -3,7 +3,7 @@
 	"name": "WorkPlay Pomodoro",
 	"version": "0.1",
 	"icons": {
-		"16": "images/workPlay.png",
+		"16": "images/workPlay16.png",
 		"48": "images/workPlay.png",
 		"128": "images/workPlay.png"
 	},

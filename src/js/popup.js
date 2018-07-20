@@ -38,7 +38,7 @@ $(document).ready(function(){
     });
 
 tasksList.on('dblclick', "ul", function(){
-        let deleteButton = $("<button><i class='fas fa-trash-alt'></i></button>", {class: "deleteButton"}), 
+        let deleteButton = $("<button class='deleteButton'><i class='fas fa-trash-alt'></i></button>", {class: "deleteButton"}), 
         taskId = this.id;
         taskDiv = $("#" + taskId);
 
@@ -50,6 +50,10 @@ tasksList.on('dblclick', "ul", function(){
                     let form = editTaskForm.render(task);
                     form.append(deleteButton);
                     form.insertBefore(taskDiv);
+                    $('<div class="editButtonsDiv"></div>').appendTo('.taskList');
+                    $(saveBtn).appendTo('.editButtonsDiv');
+                    $(cancelBtn).appendTo('.editButtonsDiv');
+                    $(deleteButton).appendTo('.editButtonsDiv');
                 }); 
             });
         }
@@ -110,6 +114,9 @@ tasksList.on('dblclick', "ul", function(){
             addMode = true;
             newTaskBtn.hide();
             addTaskForm.render().insertBefore(newTaskBtn);
+            $("<div class='.newTaskButtonsDiv'></div>").appendTo(addTaskForm);
+            $(".editButtonsDiv").append(saveBtn);
+            $(".editButtonsDiv").append(cancelBtn);
         }
     });
 

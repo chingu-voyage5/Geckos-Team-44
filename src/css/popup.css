@@ -156,6 +156,10 @@ button:hover a {
 	margin-right: 10px;
 }
 
+.deleteButton {
+	margin-right: 35px;
+}
+
 #modeSelect, #titleInput, #timeBlocksInput {
 	display: block;
 	font-family: "Maven Pro";

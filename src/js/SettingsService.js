@@ -1,13 +1,13 @@
 
 function SettingsService(settingsRepository){
-    this.settingsRepository = settingsRepository;
-    this.timeBlockSize = 3;
-    this.displayTaskNotification = true;
-    
     this.defaultSettings = {
-        timeBlockSize: 3,
+        timeBlockSize: 15,
         displayTaskNotification: true
     };
+
+    this.settingsRepository = settingsRepository;
+    this.timeBlockSize = this.defaultSettings.timeBlockSize;
+    this.displayTaskNotification = this.defaultSettings.displayTaskNotification;
 }
 
 SettingsService.prototype.loadUserSettings = function(){

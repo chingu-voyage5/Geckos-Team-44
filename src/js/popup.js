@@ -48,12 +48,8 @@ tasksList.on('dblclick', "ul", function(){
                 page.taskRepository.fetch(taskId, function(task){
                     editMode = true;
                     let form = editTaskForm.render(task);
-                    form.append(deleteButton);
+                    editTaskForm.buttonsDiv.append(deleteButton);
                     form.insertBefore(taskDiv);
-                    $('<div class="editButtonsDiv"></div>').appendTo('.taskList');
-                    $(saveBtn).appendTo('.editButtonsDiv');
-                    $(cancelBtn).appendTo('.editButtonsDiv');
-                    $(deleteButton).appendTo('.editButtonsDiv');
                 }); 
             });
         }

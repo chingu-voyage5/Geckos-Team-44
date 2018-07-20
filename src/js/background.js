@@ -1,6 +1,3 @@
-
-// chrome.storage.sync.clear();
-
 chrome.storage.sync.clear();
 
 var settingsRepository = new SettingsRepository(chrome);

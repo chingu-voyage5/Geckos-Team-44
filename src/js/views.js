@@ -2,6 +2,7 @@ class TaskFormView {
   constructor(taskDiv = null) {
     this.taskDiv = taskDiv;
     this.taskFormDiv = $("<div></div>", { class: "taskForm" });
+    this.buttonsDiv = $("<div id='buttons'></div>");
     this.saveBtn = $("<button class='saveButton'>Save</button>");
     this.cancelBtn = $("<button>Cancel</button>");
     this.errorsList = $("<div></div>", { id: "errorsList" }).css({ color: "red" });
@@ -35,10 +36,10 @@ class TaskFormView {
     titleDiv.append(titleInput.val(task.title));
     timeBlocksDiv.append(timeBlocksInput.val(task.timeBlocks));
     form.append([modeDiv, titleDiv, timeBlocksDiv]);
+    this.buttonsDiv.append(this.saveBtn, this.cancelBtn);
     this.taskFormDiv.addClass("taskList");
     this.taskFormDiv.append(form);
-    this.taskFormDiv.append(this.saveBtn);
-    this.taskFormDiv.append(this.cancelBtn);
+    this.taskFormDiv.append(this.buttonsDiv);
     this.taskFormDiv.prepend(this.errorsList);
 
     this.saveBtn.click(function () {

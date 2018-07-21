@@ -38,17 +38,18 @@ $(document).ready(function(){
     });
 
 tasksList.on('dblclick', "ul", function(){
-        let deleteButton = $("<button class='deleteButton'><i class='fas fa-trash-alt'></i></button>", {class: "deleteButton"}), 
         taskId = this.id;
         taskDiv = $("#" + taskId);
+        let deleteButton = $("<button class='deleteButton'><i class='fas fa-trash-alt'></i></button>");
 
         if (!editMode && !addMode) {
             taskDiv.hide();
             chrome.runtime.getBackgroundPage(function(page){
                 page.taskRepository.fetch(taskId, function(task){
                     editMode = true;
+                    editTaskForm.buttonsDiv.empty();
                     let form = editTaskForm.render(task);
-                    editTaskForm.buttonsDiv.append(deleteButton);
+                    form.children().last().append(deleteButton);
                     form.insertBefore(taskDiv);
                 }); 
             });

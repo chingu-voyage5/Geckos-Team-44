@@ -3,7 +3,7 @@ Geckos-Team-44 Chrome Extension | Voyage-5 | chingu.io
 
 Work/Play Pomodoro
 
-MVP: A chrome extension which helps users balance their work and play activities by creating daily tasks and using pomodoro techniques to manage time better. The new tab page can be set to ‘work’ or ‘play’ mode, providing users with different widgets to optimize their time using either mode.
+MVP: A chrome extension which helps users balance their work and play activities by creating daily tasks and using pomodoro techniques to manage time better. 
 
 User Stories:
 
